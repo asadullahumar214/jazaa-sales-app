@@ -1,0 +1,2122 @@
+[
+  {
+    "id": "1",
+    "name": "Bread Crumbs 200GM",
+    "rp": 160.0,
+    "rate": 122.03389830508476,
+    "product_type": "TS",
+    "category": "BREAD CRUMB",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "2",
+    "name": "Miswak",
+    "rp": 50.0,
+    "rate": 45.0,
+    "product_type": "E",
+    "category": "MISWAK",
+    "foc": 3.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "3",
+    "name": "Baking Powder 50GM",
+    "rp": 75.0,
+    "rate": 57.203389830508485,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "4",
+    "name": "Banana Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "5",
+    "name": "Blackcurrant Flavor Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "6",
+    "name": "Blueberry Flavor Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "7",
+    "name": "Cocoa Powder 50GM",
+    "rp": 170.0,
+    "rate": 129.66101694915255,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "8",
+    "name": "Corn Flour 250GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "9",
+    "name": "Cream Caramel 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "10",
+    "name": "Kheer Mix 155GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "11",
+    "name": "Mango Custard 250GM",
+    "rp": 170.0,
+    "rate": 129.66101694915255,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "12",
+    "name": "Mango Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "13",
+    "name": "Mango Pudding Mix 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "14",
+    "name": "Orange Flavor Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "15",
+    "name": "Pineapple Flavor Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "16",
+    "name": "Pista Kheer Mix 155GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "17",
+    "name": "Pistachio Pudding Mix 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "18",
+    "name": "Pudding Mix 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "19",
+    "name": "Rabri Flavor Falooda 220GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "20",
+    "name": "Raspberry Flavor Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "21",
+    "name": "Raspberry Pudding Mix 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "22",
+    "name": "Sheer Khurma 160GM",
+    "rp": 225.0,
+    "rate": 171.61016949152543,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "23",
+    "name": "Strawberry Custard 250GM",
+    "rp": 170.0,
+    "rate": 129.66101694915255,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "24",
+    "name": "Strawberry Jelly 80GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "25",
+    "name": "Vanila Custard 250GM",
+    "rp": 170.0,
+    "rate": 129.66101694915255,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "26",
+    "name": "Badam Kheer Mix 155GM",
+    "rp": 150.0,
+    "rate": 114.40677966101697,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "27",
+    "name": "Chocolate Custard 90GM",
+    "rp": 170.0,
+    "rate": 129.66101694915255,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "28",
+    "name": "Gelatine Powder 50GM",
+    "rp": 205.0,
+    "rate": 156.35593220338984,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "29",
+    "name": "Rasmalai 75Gm",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "30",
+    "name": "Strawberry Flavor Falooda 220GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "N",
+    "category": "RANGE OF DESERTS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "31",
+    "name": "Fried Onion 400GM",
+    "rp": 380.0,
+    "rate": 289.83050847457633,
+    "product_type": "N",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "32",
+    "name": "Ispaghol 95GM",
+    "rp": 630.0,
+    "rate": 567.0,
+    "product_type": "E",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "33",
+    "name": "Meat Tenderizer 40GM",
+    "rp": 95.0,
+    "rate": 72.45762711864408,
+    "product_type": "TS",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "34",
+    "name": "Pheni 200GM",
+    "rp": 240.0,
+    "rate": 196.36363636363635,
+    "product_type": "R",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "35",
+    "name": "Vermicelli 100GM",
+    "rp": 50.0,
+    "rate": 40.90909090909091,
+    "product_type": "R",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 3.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "36",
+    "name": "Vermicelli 150GM",
+    "rp": 70.0,
+    "rate": 57.27272727272727,
+    "product_type": "R",
+    "category": "RANGE OF ESSENTIALS",
+    "foc": 3.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "37",
+    "name": "Blackseed Oil 125ML",
+    "rp": 695.0,
+    "rate": 530.0847457627119,
+    "product_type": "N",
+    "category": "RANGE OF HERBAL OILS",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "38",
+    "name": "Castor Oil 125ML",
+    "rp": 495.0,
+    "rate": 377.54237288135596,
+    "product_type": "N",
+    "category": "RANGE OF HERBAL OILS",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "39",
+    "name": "Coconut Oil 125ML",
+    "rp": 495.0,
+    "rate": 377.54237288135596,
+    "product_type": "N",
+    "category": "RANGE OF HERBAL OILS",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "40",
+    "name": "Mustard Oil 125ML",
+    "rp": 495.0,
+    "rate": 377.54237288135596,
+    "product_type": "N",
+    "category": "RANGE OF HERBAL OILS",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "41",
+    "name": "Sesame Oil 125ML",
+    "rp": 495.0,
+    "rate": 377.54237288135596,
+    "product_type": "N",
+    "category": "RANGE OF HERBAL OILS",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "42",
+    "name": "Acacia Honey 250GM",
+    "rp": 950.0,
+    "rate": 724.5762711864407,
+    "product_type": "N",
+    "category": "RANGE OF HONEY",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "43",
+    "name": "Sidr Honey 250GM",
+    "rp": 1750.0,
+    "rate": 1334.7457627118645,
+    "product_type": "N",
+    "category": "RANGE OF HONEY",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "44",
+    "name": "Acacia Honey 500GM",
+    "rp": 1355.0,
+    "rate": 1033.4745762711866,
+    "product_type": "N",
+    "category": "RANGE OF HONEY",
+    "foc": 1.0,
+    "main_qty": 32.0
+  },
+  {
+    "id": "45",
+    "name": "Sidr Honey 500GM",
+    "rp": 2850.0,
+    "rate": 2173.728813559322,
+    "product_type": "N",
+    "category": "RANGE OF HONEY",
+    "foc": 1.0,
+    "main_qty": 32.0
+  },
+  {
+    "id": "46",
+    "name": "Refined Salt 800GM",
+    "rp": 60.0,
+    "rate": 54.0,
+    "product_type": "E",
+    "category": "RANGE OF IODIZE SALT",
+    "foc": 3.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "47",
+    "name": "Black Pepper Potato Sticks (Mini) 40GM",
+    "rp": 50.0,
+    "rate": 45.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "48",
+    "name": "Black Pepper Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "49",
+    "name": "Chaat Papri 200GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "50",
+    "name": "Dahi Boondi 200GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "51",
+    "name": "Dal Chana 200GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "52",
+    "name": "Dal Moong 200GM",
+    "rp": 220.0,
+    "rate": 198.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "53",
+    "name": "Dal Moth 200GM",
+    "rp": 210.0,
+    "rate": 189.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "54",
+    "name": "Fiery Chicken Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "55",
+    "name": "Gathia 200GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "56",
+    "name": "Hot Sizzling Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "57",
+    "name": "Ketchup Tango Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "58",
+    "name": "Khatta Meetha Mix (Mini) 40GM",
+    "rp": 50.0,
+    "rate": 45.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "59",
+    "name": "Khatta Meetha Mix 200GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "60",
+    "name": "Mix Nimco (Mini) 40GM",
+    "rp": 50.0,
+    "rate": 45.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "61",
+    "name": "Nimco Mix 200GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "62",
+    "name": "Peri Crunch Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "63",
+    "name": "Salty Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "64",
+    "name": "Spicy Potato Sticks 180GM",
+    "rp": 200.0,
+    "rate": 180.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "65",
+    "name": "Bareek Boondi 200GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "66",
+    "name": "Dahi Phulki 200GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "67",
+    "name": "Masala Papri 200GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF NIMCO",
+    "foc": 1.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "68",
+    "name": "Extra Virgin Olive Oil 500ML",
+    "rp": 2800.0,
+    "rate": 2135.593220338983,
+    "product_type": "N",
+    "category": "RANGE OF OIL",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "69",
+    "name": "Virgin Olive Oil 500ML",
+    "rp": 2400.0,
+    "rate": 1830.5084745762715,
+    "product_type": "N",
+    "category": "RANGE OF OIL",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "70",
+    "name": "Garlic Paste 330GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "71",
+    "name": "Garlic Paste 750GM",
+    "rp": 800.0,
+    "rate": 610.1694915254238,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "72",
+    "name": "Ginger Garlic 330GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "73",
+    "name": "Ginger Garlic 750GM",
+    "rp": 800.0,
+    "rate": 610.1694915254238,
+    "product_type": "TS",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "74",
+    "name": "Ginger Paste 330GM",
+    "rp": 460.0,
+    "rate": 350.8474576271187,
+    "product_type": "TS",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "75",
+    "name": "Ginger Paste 750GM",
+    "rp": 800.0,
+    "rate": 610.1694915254238,
+    "product_type": "TS",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "76",
+    "name": "Green Chilli Paste 330GM",
+    "rp": 335.0,
+    "rate": 255.50847457627123,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "77",
+    "name": "Papaya Paste 330GM",
+    "rp": 335.0,
+    "rate": 255.50847457627123,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "78",
+    "name": "Onion Paste 330GM",
+    "rp": 335.0,
+    "rate": 255.50847457627123,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "79",
+    "name": "Onion Paste 750GM",
+    "rp": 610.0,
+    "rate": 465.2542372881356,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "80",
+    "name": "Papaya Paste 750GM",
+    "rp": 610.0,
+    "rate": 465.2542372881356,
+    "product_type": "N",
+    "category": "RANGE OF PASTE",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "81",
+    "name": "Himalayan Pink Salt Fine Pouch 800GM",
+    "rp": 95.0,
+    "rate": 72.45762711864408,
+    "product_type": "N",
+    "category": "RANGE OF PINK SALT",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "82",
+    "name": "Himalayan Pink Salt Glass Grinder 200GM",
+    "rp": 480.0,
+    "rate": 366.10169491525426,
+    "product_type": "N",
+    "category": "RANGE OF PINK SALT",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "83",
+    "name": "Himalayan Pink Salt Coarse Pouch 800GM",
+    "rp": 85.0,
+    "rate": 64.83050847457628,
+    "product_type": "N",
+    "category": "RANGE OF PINK SALT",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "84",
+    "name": "Himalayan Pink Salt Plastic Grinder 220GM",
+    "rp": 180.0,
+    "rate": 137.28813559322035,
+    "product_type": "N",
+    "category": "RANGE OF PINK SALT",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "85",
+    "name": "Himalayan Pink Salt Shaker 500GM",
+    "rp": 115.0,
+    "rate": 87.71186440677967,
+    "product_type": "N",
+    "category": "RANGE OF PINK SALT",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "86",
+    "name": "Black Pepper Powder 100GM",
+    "rp": 410.0,
+    "rate": 312.7118644067797,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "87",
+    "name": "Black Pepper Powder 50GM",
+    "rp": 210.0,
+    "rate": 160.16949152542375,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "88",
+    "name": "Chat Masala 100GM",
+    "rp": 175.0,
+    "rate": 133.47457627118644,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "89",
+    "name": "Chat Masala 50GM",
+    "rp": 90.0,
+    "rate": 68.64406779661017,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "90",
+    "name": "Coriander Powder 100GM",
+    "rp": 155.0,
+    "rate": 118.22033898305087,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "91",
+    "name": "Coriander Powder 50GM",
+    "rp": 80.0,
+    "rate": 61.01694915254238,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "92",
+    "name": "Cumin Powder 100GM",
+    "rp": 525.0,
+    "rate": 400.4237288135593,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "93",
+    "name": "Cumin Powder 50GM",
+    "rp": 265.0,
+    "rate": 202.11864406779662,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "94",
+    "name": "Garam Masala 100GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "95",
+    "name": "Garlic Powder 100GM",
+    "rp": 210.0,
+    "rate": 160.16949152542375,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "96",
+    "name": "Garlic Powder 50GM",
+    "rp": 125.0,
+    "rate": 95.33898305084747,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "97",
+    "name": "Ginger Powder 100GM",
+    "rp": 310.0,
+    "rate": 236.44067796610173,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "98",
+    "name": "Ginger Powder 50GM",
+    "rp": 160.0,
+    "rate": 122.03389830508476,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "99",
+    "name": "Dried Fenugreek Leaves (Kasuri Methi) 25 GM",
+    "rp": 55.0,
+    "rate": 41.949152542372886,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "100",
+    "name": "Paprika Powder 50GM",
+    "rp": 185.0,
+    "rate": 141.10169491525423,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "101",
+    "name": "Red Chilli Powder 100GM",
+    "rp": 205.0,
+    "rate": 156.35593220338984,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "102",
+    "name": "Red Chilli Powder 50GM",
+    "rp": 115.0,
+    "rate": 87.71186440677967,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "103",
+    "name": "Turmeric Powder 100GM",
+    "rp": 190.0,
+    "rate": 144.91525423728817,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "104",
+    "name": "Turmeric Powder 50GM",
+    "rp": 100.0,
+    "rate": 76.27118644067798,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "105",
+    "name": "White Pepper Powder 50GM",
+    "rp": 300.0,
+    "rate": 228.81355932203394,
+    "product_type": "TS",
+    "category": "RANGE OF PLAIN SPICES",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "106",
+    "name": "Hyderabadi Pulao 25GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "107",
+    "name": "Mughlai Qorma 25GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "108",
+    "name": "Peshawari Karahi 25GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "109",
+    "name": "Riwaiti Achar Gosht 25GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "110",
+    "name": "Special Tikka 25GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "111",
+    "name": "Traditional Bombay Biryani 30GM",
+    "rp": 60.0,
+    "rate": 45.76271186440678,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SACHET)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "112",
+    "name": "Malai Boti 60GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "113",
+    "name": "Authentic Sindhi Biryani 120GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "114",
+    "name": "Broast Mix 125GM",
+    "rp": 190.0,
+    "rate": 144.91525423728817,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "115",
+    "name": "Chapli Kabab Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "116",
+    "name": "Chatpata Tandoori Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "117",
+    "name": "Daighi Beef Biryani 120GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "118",
+    "name": "Dehli Nihari 120GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "119",
+    "name": "Fish Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "120",
+    "name": "Fried Fish 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "121",
+    "name": "Haleem Mix 300GM",
+    "rp": 350.0,
+    "rate": 266.9491525423729,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "122",
+    "name": "Hyderabadi Pulao 130GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "123",
+    "name": "Karachi Biryani Masala 120GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "124",
+    "name": "Koyla Karhai 80GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "125",
+    "name": "Mughlai Qorma 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "126",
+    "name": "Peshawari Karahi 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "127",
+    "name": "Riwaiti Achar Gosht 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "128",
+    "name": "Shahi Seekh Kabab 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "129",
+    "name": "Shami Kabab 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "130",
+    "name": "Special Tikka 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "131",
+    "name": "Traditional Bombay Biryani 120GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "132",
+    "name": "Bihari Kabab 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "133",
+    "name": "Biryani Masala 90GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "134",
+    "name": "Butter Chicken 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "135",
+    "name": "CHICKEN BIRYANI 110GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "136",
+    "name": "Chicken Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "137",
+    "name": "Curry Kofta Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "138",
+    "name": "Curry Powder 200GM",
+    "rp": 380.0,
+    "rate": 289.83050847457633,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "139",
+    "name": "Haleem Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "140",
+    "name": "Paya Masala 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "141",
+    "name": "Tikka Boti 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "142",
+    "name": "Vegetable Masala 100GM",
+    "rp": 210.0,
+    "rate": 160.16949152542375,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "143",
+    "name": "Zaiqaydar Dum Qeema 100GM",
+    "rp": 230.0,
+    "rate": 175.42372881355934,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (DOUBLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "144",
+    "name": "Afghani Malai Boti 30GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "145",
+    "name": "Authentic Sindhi Biryani 60GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "146",
+    "name": "Bihari Kabab 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "147",
+    "name": "Biryani Masala 45GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "148",
+    "name": "Butter Chicken 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "149",
+    "name": "Chatpata Tandoori Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "150",
+    "name": "CHICKEN BIRYANI 55GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "151",
+    "name": "Chicken Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "152",
+    "name": "Daighi Beef Biryani 60GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "153",
+    "name": "Delhi Nihari 60GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "154",
+    "name": "Fish Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "155",
+    "name": "Fried Fish 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "156",
+    "name": "Haleem Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "157",
+    "name": "Hyderabadi Pulao 65GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "158",
+    "name": "Karachi Biryani Masala 60GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "159",
+    "name": "Koyla Karhai 40GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "160",
+    "name": "Mughlai Qorma 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "161",
+    "name": "Paya Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "162",
+    "name": "Peshawari Karahi 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "163",
+    "name": "Riwaiti Achar Gosht 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "164",
+    "name": "Shahi Seekh Kabab 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "165",
+    "name": "Shami Kabab 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "166",
+    "name": "Special Tikka 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "167",
+    "name": "Tikka Boti 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "168",
+    "name": "Traditional Bombay Biryani 60GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "169",
+    "name": "Zaiqaydar Dum Qeema 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "170",
+    "name": "Curry Kofta Masala 50GM",
+    "rp": 130.0,
+    "rate": 99.15254237288137,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "171",
+    "name": "Vegetable Masala 50GM",
+    "rp": 115.0,
+    "rate": 87.71186440677967,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (SINGLE PACK)",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "172",
+    "name": "Basmati Rice (Red) 1KG",
+    "rp": 410.0,
+    "rate": 387.65500000000003,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "173",
+    "name": "Basmati Rice (Red) 5KG",
+    "rp": 2045.0,
+    "rate": 1933.5475000000001,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "174",
+    "name": "Brown Basmati Rice 1.5KG",
+    "rp": 680.0,
+    "rate": 642.94,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "175",
+    "name": "Economy Rice (Blue) 1KG",
+    "rp": 340.0,
+    "rate": 321.47,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "176",
+    "name": "Economy Rice (Blue) 5KG",
+    "rp": 1695.0,
+    "rate": 1602.6225,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "177",
+    "name": "Elite Basmati Rice (Black) 1KG",
+    "rp": 500.0,
+    "rate": 472.75,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "178",
+    "name": "Elite Basmati Rice (Black) 5KG",
+    "rp": 2495.0,
+    "rate": 2359.0225,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "179",
+    "name": "Premium Basmati Rice (Silver) 5KG",
+    "rp": 2245.0,
+    "rate": 2122.6475,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "180",
+    "name": "Premium Basmati Rice (Silver) 1KG",
+    "rp": 450.0,
+    "rate": 425.475,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "181",
+    "name": "Rozmarrah Rice (Green) 1KG",
+    "rp": 280.0,
+    "rate": 264.74,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "182",
+    "name": "Rozmarrah Rice (Green) 5KG",
+    "rp": 1395.0,
+    "rate": 1318.9725,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "183",
+    "name": "Sella Rice (Gold) 1KG",
+    "rp": 500.0,
+    "rate": 472.75,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "184",
+    "name": "Sella Rice (Gold) 5KG",
+    "rp": 2495.0,
+    "rate": 2359.0225,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "185",
+    "name": "Classic Rice 5KG",
+    "rp": 1300.0,
+    "rate": 1229.15,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "186",
+    "name": "Kifayat Rice 5KG",
+    "rp": 1050.0,
+    "rate": 992.775,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "187",
+    "name": "Standard Rice 5KG",
+    "rp": 1325.0,
+    "rate": 1252.7875,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "188",
+    "name": "Jaam-E-Khaas Red Syrup 800ML",
+    "rp": 500.0,
+    "rate": 381.3559322033899,
+    "product_type": "TS",
+    "category": "RANGE OF SYRUPS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "189",
+    "name": "Jaam-E-Khaas Ice Cream Syrup 800ML",
+    "rp": 450.0,
+    "rate": 343.22033898305085,
+    "product_type": "TS",
+    "category": "RANGE OF SYRUPS",
+    "foc": 2.0,
+    "main_qty": 12.0
+  },
+  {
+    "id": "190",
+    "name": "Assorted Cookies 200GM",
+    "rp": 490.0,
+    "rate": 373.7288135593221,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "191",
+    "name": "Cake Rusk 350GM",
+    "rp": 620.0,
+    "rate": 472.88135593220346,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "192",
+    "name": "Choco Vanilla Cookies 240GM",
+    "rp": 480.0,
+    "rate": 366.10169491525426,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "193",
+    "name": "Classic Chocolate Cookies 200GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "194",
+    "name": "Cumin Delight Cookies 240GM",
+    "rp": 480.0,
+    "rate": 366.10169491525426,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "195",
+    "name": "Naan Khatai 360GM",
+    "rp": 580.0,
+    "rate": 442.37288135593224,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "196",
+    "name": "Strawberry Jam Cookies 240GM",
+    "rp": 480.0,
+    "rate": 366.10169491525426,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "197",
+    "name": "Sugar Puff Pastry 200GM",
+    "rp": 350.0,
+    "rate": 266.9491525423729,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "198",
+    "name": "Tea Rusk 220GM",
+    "rp": 250.0,
+    "rate": 225.0,
+    "product_type": "E",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "199",
+    "name": "Assorted Cookies 240GM",
+    "rp": 600.0,
+    "rate": 457.6271186440679,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "200",
+    "name": "Choco Vanilla Cookies 200GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "201",
+    "name": "Chocolate Cake Rusk 350GM",
+    "rp": 750.0,
+    "rate": 572.0338983050848,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "202",
+    "name": "Classic Chocolate Cookies 240GM",
+    "rp": 480.0,
+    "rate": 366.10169491525426,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "203",
+    "name": "Cumin Delight Cookies 200GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "204",
+    "name": "Cumin Puff Pastry 200GM",
+    "rp": 350.0,
+    "rate": 266.9491525423729,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "205",
+    "name": "Lazo Puff Pastry 200GM",
+    "rp": 350.0,
+    "rate": 266.9491525423729,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "206",
+    "name": "Palmiers Puff Pastry 200GM",
+    "rp": 350.0,
+    "rate": 266.9491525423729,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "207",
+    "name": "Strawberry Jam Cookies 200GM",
+    "rp": 400.0,
+    "rate": 305.0847457627119,
+    "product_type": "TS",
+    "category": "RANGE OF TEA DELIGHTS",
+    "foc": 1.0,
+    "main_qty": 8.0
+  },
+  {
+    "id": "208",
+    "name": "Steam Pre Clean (Ziafat) 25KG",
+    "rp": 10485.24,
+    "rate": 9913.79442,
+    "product_type": "E",
+    "category": "RANGE OF RICE",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "209",
+    "name": "Biryani Masala 1KG",
+    "rp": 1170.0,
+    "rate": 892.3728813559322,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (HORECA PACK)",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "210",
+    "name": "Tikka Boti 1KG",
+    "rp": 880.0,
+    "rate": 671.1864406779662,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (HORECA PACK)",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "211",
+    "name": "Peshawari Karahi Masala 1KG",
+    "rp": 900.0,
+    "rate": 686.4406779661017,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (HORECA PACK)",
+    "foc": 0,
+    "main_qty": 1
+  },
+  {
+    "id": "212",
+    "name": "Riwaiti Achar Gosht 1KG",
+    "rp": 805.0,
+    "rate": 613.9830508474577,
+    "product_type": "TS",
+    "category": "RANGE OF RECIPE & SEASONING (HORECA PACK)",
+    "foc": 0,
+    "main_qty": 1
+  }
+]
