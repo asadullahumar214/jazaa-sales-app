@@ -14,9 +14,22 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 };
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  // Rescue Loop: Synchronous hydration prevents 1-frame routing flashes
+  const [user, setUser] = useState(() => {
+    try {
+      return getActiveUser();
+    } catch (e) {
+      console.error("HYDRATION_ERROR:", e);
+      return null;
+    }
+  });
 
   useEffect(() => {
+    console.log("APP_STARTUP: Checking environment and database connection...");
+    if (!import.meta.env.VITE_SUPABASE_URL) {
+      console.error("CRITICAL_ERROR: Supabase URL is missing from environment variables!");
+    }
+
     initStore();
     setUser(getActiveUser());
     
