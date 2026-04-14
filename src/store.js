@@ -64,17 +64,17 @@ export const getOrders = async () => {
 };
 
 export const saveOrder = async (order) => {
-  // 1. Execute stock deduction first
-  const { data: invData } = await supabase.from('inventory').select('*');
-  if (invData) {
-    const updates = [];
-    order.items.forEach(item => {
-      const invItem = invData.find(i => String(i.id) === String(item.id));
-      if (invItem) updates.push({ ...invItem, stock: invItem.stock - item.qty });
-    });
-    if (updates.length > 0) {
-      await supabase.from('inventory').upsert(updates);
-    }
+  // 1. Execute atomic stock deduction for each item
+  const deductionPromises = order.items.map(item => 
+    supabase.rpc('deduct_stock', { p_item_id: String(item.id), p_qty: item.qty })
+  );
+  
+  const results = await Promise.all(deductionPromises);
+  const errors = results.filter(r => r.error);
+  if (errors.length > 0) {
+    console.error("Some stock deductions failed:", errors);
+    // Ideally rollback here, but for now we log. 
+    // Atomic multi-row RPC would be better for perfect safety.
   }
 
   // 2. Insert order
@@ -98,18 +98,12 @@ export const cancelOrder = async (orderId, reason) => {
   const { data: orderData } = await supabase.from('orders').select('*').eq('id', orderId).single();
   if (!orderData || orderData.status === 'cancelled') return;
 
-  // 2. Add stock back
-  const { data: invData } = await supabase.from('inventory').select('*');
-  if (invData) {
-    const updates = [];
-    JSON.parse(JSON.stringify(orderData.items)).forEach(item => {
-      const invItem = invData.find(i => String(i.id) === String(item.id));
-      if (invItem) updates.push({ ...invItem, stock: invItem.stock + item.qty });
-    });
-    if (updates.length > 0) {
-      await supabase.from('inventory').upsert(updates);
-    }
-  }
+  // 2. Restore stock atomically
+  const items = typeof orderData.items === 'string' ? JSON.parse(orderData.items) : orderData.items;
+  const restorePromises = items.map(item => 
+    supabase.rpc('restore_stock', { p_item_id: String(item.id), p_qty: item.qty })
+  );
+  await Promise.all(restorePromises);
 
   // 3. Mark as cancelled
   await supabase.from('orders').update({

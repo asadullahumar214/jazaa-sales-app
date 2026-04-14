@@ -20,10 +20,24 @@ export default function App() {
     initStore();
     setUser(getActiveUser());
     
-    // Listen to local storage changes for same-tab cross-component auth sync
-    const interval = setInterval(() => {
-      setUser(getActiveUser());
-    }, 1000);
+    // Hardening: Verify account status periodically to force logout if deactivated
+    const syncStatus = async () => {
+      const active = getActiveUser();
+      if (!active) {
+        if (user) setUser(null);
+        return;
+      }
+      
+      const { data: dbUser } = await supabase.from('users').select('is_active').eq('id', active.id).single();
+      if (dbUser && !dbUser.is_active) {
+          handleLogout();
+      } else {
+          setUser(active);
+      }
+    };
+
+    syncStatus();
+    const interval = setInterval(syncStatus, 15000); 
     return () => clearInterval(interval);
   }, []);
 

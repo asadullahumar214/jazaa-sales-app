@@ -7,6 +7,7 @@ export default function UserManager() {
   const [newName, setNewName] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,6 +31,7 @@ export default function UserManager() {
       return;
     }
 
+    setSaving(true);
     const newUser = { id, role: 'orderbooker', name, password: newPassword, is_active: true };
     const updated = [...users, newUser];
     
@@ -46,6 +48,7 @@ export default function UserManager() {
     setNewName('');
     setNewPassword('');
     setError('');
+    setSaving(false);
   };
 
   const toggleActive = async (userId) => {
@@ -137,7 +140,9 @@ export default function UserManager() {
               onChange={e => setNewPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-primary">Create OrderBooker</button>
+          <button type="submit" disabled={saving} className="btn btn-primary">
+            {saving ? 'Creating...' : 'Create OrderBooker'}
+          </button>
         </form>
 
         {/* Users Table */}

@@ -6,17 +6,20 @@ export default function Login() {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError(''); // Clear previous errors
     try {
+      setLoading(true);
       const users = await getUsers();
       const foundUser = users.find(u => u.id === userId && u.password === password);
 
       if (foundUser) {
           if (!foundUser.is_active) {
+              setLoading(false);
               setError("Account Disabled. Please contact the administrator.");
               return;
           }
@@ -24,9 +27,11 @@ export default function Login() {
           if (foundUser.role === 'admin') navigate('/admin');
           else navigate('/booker');
       } else {
+        setLoading(false);
         setError("Invalid ID or Password.");
       }
     } catch (err) {
+      setLoading(false);
       console.error("Login Error:", err);
       setError("System currently unavailable. Please check your connection.");
     }
@@ -60,7 +65,9 @@ export default function Login() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>Login</button>
+          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%' }}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { getCustomers, setCustomers } from '../store';
+import { debounce } from '../utils/debounce';
 
 export default function CustomerManager() {
   const [customers, setLocalCustomers] = useState([]);
@@ -33,14 +33,20 @@ export default function CustomerManager() {
     await setCustomers([newC]); // Upsert only the new customer
   };
 
-  const handleEditPhone = async (id, newPhone) => {
+  const debouncedPhoneUpdate = React.useMemo(
+    () => debounce(async (id, newPhone, currentCustomers) => {
+      const targetCustomer = currentCustomers.find(c => String(c.id) === String(id));
+      if (targetCustomer) {
+        await setCustomers([{ ...targetCustomer, phone: newPhone }]);
+      }
+    }, 1000),
+    []
+  );
+
+  const handleEditPhone = (id, newPhone) => {
     const updated = customers.map(c => String(c.id) === String(id) ? { ...c, phone: newPhone } : c);
-    setLocalCustomers(updated); // Optimistic UI
-    
-    const targetCustomer = updated.find(c => String(c.id) === String(id));
-    if (targetCustomer) {
-       await setCustomers([targetCustomer]);
-    }
+    setLocalCustomers(updated); // Instant UI update
+    debouncedPhoneUpdate(id, newPhone, updated); // Debounced DB update
   };
 
   return (
