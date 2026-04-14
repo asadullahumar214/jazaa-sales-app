@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getInventory, getCustomers, saveOrder, getActiveUser, getOrders, cancelOrder } from '../store';
+import { getInventory, getCustomers, saveOrder, getActiveUser, getOrders, cancelOrder, getTaxSettings } from '../store';
 import CustomerManager from '../components/CustomerManager';
 import InvoiceGenerator from '../components/InvoiceGenerator';
 
@@ -28,8 +28,6 @@ export default function OrderBooker() {
 
   useEffect(() => {
     const init = async () => {
-      // Must dynamically import getTaxSettings from store since we added it
-      const { getTaxSettings } = await import('../store');
       const s = await getTaxSettings();
       setSettingsObj(s);
       await loadData();
