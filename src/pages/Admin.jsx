@@ -247,6 +247,7 @@ export default function Admin() {
 
       {/* Inventory Tab */}
       {activeTab === 'inventory' && (
+        <>
           <div className="flex gap-4 mb-6 items-end" style={{ background: '#f8fafc', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label>Bulk Brand Discount (FOC)</label>
@@ -298,6 +299,7 @@ export default function Admin() {
                  </label>
             </div>
           </div>
+
           <div className="table-responsive" style={{ maxHeight: '500px', overflowY: 'auto' }}>
             <table>
               <thead>
@@ -353,6 +355,7 @@ export default function Admin() {
               </tbody>
             </table>
           </div>
+        </>
       )}
 
       {/* Customers Tab */}
