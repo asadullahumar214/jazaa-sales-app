@@ -37,8 +37,8 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
   let targetTotalForOne = Math.round(T); 
   
   // Now reverse-calculate beautifully for the TP Invoice Formats to match targetTotalForOne!
-  // S_after_foc_ratio = T / S
-  let ratio = T / S;
+  // We use the ROUNDED target to ensure the components sum perfectly.
+  let ratio = targetTotalForOne / S;
   
   let afterDiscRate = tp * ratio;
   let gstAmt = baseGST * ratio;
@@ -51,6 +51,14 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
       discPctRP = ((product.rp - targetTotalForOne) / product.rp);
   }
 
+  // Floor Price Validation
+  let floorPrice = 0;
+  if (shopkeeperType === 'IT') floorPrice = product.min_price_it || 0;
+  else if (shopkeeperType === 'Both') floorPrice = product.min_price_reg || 0;
+  else floorPrice = product.min_price_ur || 0;
+
+  const isBelowFloor = targetTotalForOne < floorPrice;
+
   return {
       rate: tp,
       afterDiscRate: afterDiscRate,
@@ -62,6 +70,8 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
       advTaxAmt: advTaxAmt,
       unitTotal: targetTotalForOne,
       total: targetTotalForOne * qty,
+      isBelowFloor,
+      floorPrice,
       // For RP Invoice
       rp: product.rp,
       discPctRP: discPctRP,

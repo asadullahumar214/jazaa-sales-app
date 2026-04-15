@@ -65,8 +65,10 @@ export const getOrders = async () => {
 
 export const saveOrder = async (order) => {
   // 1. Execute atomic stock deduction for each item
-  const deductionPromises = order.items.map(item => 
-    supabase.rpc('deduct_stock', { p_item_id: String(item.id), p_qty: item.qty })
+  const validItems = (order.items || []).filter(item => item && item.id && (item.qty || 0) > 0);
+  
+  const deductionPromises = validItems.map(item => 
+    supabase.rpc('deduct_stock', { p_item_id: String(item.id), p_qty: parseInt(item.qty) })
   );
   
   const results = await Promise.all(deductionPromises);

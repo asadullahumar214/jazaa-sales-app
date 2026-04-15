@@ -22,199 +22,82 @@ export default function UserManager() {
     const id = newId.trim().toLowerCase();
     const name = newName.trim();
     
-    if (!id || !name || !newPassword) {
-      setError('ID, Name, and Password are required.');
-      return;
-    }
-    if (users.find(u => u.id === id)) {
-      setError(`User ID "${id}" already exists.`);
-      return;
-    }
+    if (!id || !name || !newPassword) return setError('All fields required');
+    if (users.find(u => u.id === id)) return setError(`ID "${id}" exists`);
 
     setSaving(true);
-    const newUser = { id, role: 'orderbooker', name, password: newPassword, is_active: true };
-    const updated = [...users, newUser];
-    
+    const updated = [...users, { id, role: 'orderbooker', name, password: newPassword, is_active: true }];
     setLocalUsers(updated);
     await setUsers(updated);
-
-    await addAuditLog({
-      action: 'USER_CREATED',
-      userId: 'admin',
-      details: `Created OrderBooker account: ${name} (${id})`
-    });
-
-    setNewId('');
-    setNewName('');
-    setNewPassword('');
-    setError('');
-    setSaving(false);
+    await addAuditLog({ action: 'USER_CREATED', userId: 'admin', details: `Created: ${name} (${id})` });
+    setNewId(''); setNewName(''); setNewPassword(''); setError(''); setSaving(false);
   };
 
   const toggleActive = async (userId) => {
-    if (userId === 'admin') return; // Cannot deactivate admin
-    const updated = users.map(u => 
-      u.id === userId ? { ...u, is_active: !u.is_active } : u
-    );
-    
+    if (userId === 'admin') return;
+    const updated = users.map(u => u.id === userId ? { ...u, is_active: !u.is_active } : u);
     setLocalUsers(updated);
     await setUsers(updated);
-
-    const targetUser = updated.find(u => u.id === userId);
-    await addAuditLog({
-      action: targetUser.is_active ? 'USER_ACTIVATED' : 'USER_DEACTIVATED',
-      userId: 'admin',
-      details: `${targetUser.is_active ? 'Activated' : 'Deactivated'} user: ${targetUser.name} (${userId})`
-    });
+    const target = updated.find(u => u.id === userId);
+    await addAuditLog({ action: target.is_active ? 'USER_ACTIVATED' : 'USER_DEACTIVATED', userId: 'admin', details: `${target.name} (${userId})` });
   };
 
   const deleteUser = async (userId) => {
     if (userId === 'admin') return;
-    const targetUser = users.find(u => u.id === userId);
-    if (!window.confirm(`Are you sure you want to delete "${targetUser.name}"?`)) return;
-    
+    const target = users.find(u => u.id === userId);
+    if (!window.confirm(`Delete "${target.name}"?`)) return;
     const updated = users.filter(u => u.id !== userId);
-    
     setLocalUsers(updated);
     await setUsers(updated);
-
-    await addAuditLog({
-      action: 'USER_DELETED',
-      userId: 'admin',
-      details: `Deleted user: ${targetUser.name} (${userId})`
-    });
+    await addAuditLog({ action: 'USER_DELETED', userId: 'admin', details: `Deleted: ${target.name} (${userId})` });
   };
 
   return (
     <div className="card mt-4 mb-4">
-      <h3>👥 User Management</h3>
-      <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
-        Create and manage OrderBooker accounts. Deactivated accounts cannot log in.
-      </p>
+      <div className="mb-6">
+         <h3 className="text-xl font-bold">User Management</h3>
+         <p className="text-sm text-muted">Control access for field staff.</p>
+      </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        {/* Create New User Form */}
-        <form onSubmit={handleCreate} className="flex flex-col gap-4">
-          {error && (
-            <div style={{ 
-              padding: '0.75rem', 
-              background: 'rgba(239, 68, 68, 0.1)', 
-              border: '1px solid var(--danger)',
-              borderRadius: '8px', 
-              color: 'var(--danger)', 
-              fontSize: '0.85rem' 
-            }}>
-              {error}
-            </div>
-          )}
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label>Login ID</label>
-            <input 
-              required 
-              type="text" 
-              className="form-input" 
-              placeholder="e.g. ob2, ob3..."
-              value={newId}
-              onChange={e => setNewId(e.target.value)}
-            />
-          </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label>Display Name</label>
-            <input 
-              required 
-              type="text" 
-              className="form-input" 
-              placeholder="e.g. Order Booker 2"
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-            />
-          </div>
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label>Password</label>
-            <input 
-              required 
-              type="text" 
-              className="form-input" 
-              placeholder="e.g. secret123"
-              value={newPassword}
-              onChange={e => setNewPassword(e.target.value)}
-            />
-          </div>
-          <button type="submit" disabled={saving} className="btn btn-primary">
-            {saving ? 'Creating...' : 'Create OrderBooker'}
-          </button>
-        </form>
+      <div className="grid grid-cols-1 gap-8">
+        {/* Form */}
+        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+           <h4 className="text-xs font-bold text-muted uppercase mb-4">Create OrderBooker</h4>
+           <form onSubmit={handleCreate} className="flex flex-col gap-4">
+              {error && <div className="p-3 bg-red-100 text-red-700 text-xs rounded-lg border border-red-200 font-bold">{error}</div>}
+              <div className="form-group"><label>Login ID</label><input required className="form-input" placeholder="e.g. jaza_01" value={newId} onChange={e => setNewId(e.target.value)} /></div>
+              <div className="form-group"><label>Name</label><input required className="form-input" placeholder="e.g. Ahmad Ali" value={newName} onChange={e => setNewName(e.target.value)} /></div>
+              <div className="form-group"><label>Password</label><input required className="form-input" placeholder="••••••••" value={newPassword} onChange={e => setNewPassword(e.target.value)} /></div>
+              <button type="submit" disabled={saving} className="btn btn-primary py-3">{saving ? 'Processing...' : 'Add Account'}</button>
+           </form>
+        </div>
 
-        {/* Users Table */}
-        <div className="table-responsive" style={{ maxHeight: '350px', overflowY: 'auto' }}>
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Password</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+        {/* List */}
+        <div className="animate-in">
+           <h4 className="text-xs font-bold text-muted uppercase mb-4">Active Staff Accounts</h4>
+           <div className="card-list">
               {users.map(u => (
-                <tr key={u.id} style={{ opacity: u.is_active ? 1 : 0.5 }}>
-                  <td style={{ fontWeight: 500 }}>{u.id}</td>
-                  <td>{u.name}</td>
-                  <td><code style={{ background: '#eee', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{u.password || '—'}</code></td>
-                  <td>
-                    <span style={{
-                      display: 'inline-block',
-                      padding: '0.15rem 0.5rem',
-                      borderRadius: '99px',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      background: u.role === 'admin' ? 'rgba(37, 99, 235, 0.15)' : 'rgba(16, 185, 129, 0.15)',
-                      color: u.role === 'admin' ? 'var(--primary)' : 'var(--secondary)'
-                    }}>
-                      {u.role === 'admin' ? 'Admin' : 'OrderBooker'}
-                    </span>
-                  </td>
-                  <td>
-                    <span style={{
-                      display: 'inline-block',
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      background: u.is_active ? 'var(--secondary)' : 'var(--danger)',
-                      marginRight: '0.4rem'
-                    }}></span>
-                    {u.is_active ? 'Active' : 'Disabled'}
-                  </td>
-                  <td>
-                    {u.role !== 'admin' && (
-                      <div className="flex gap-4" style={{ gap: '0.5rem' }}>
-                        <button 
-                          className={`btn ${u.is_active ? 'btn-outline' : 'btn-secondary'}`}
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem', minHeight: '32px' }}
-                          onClick={() => toggleActive(u.id)}
-                        >
-                          {u.is_active ? 'Disable' : 'Enable'}
-                        </button>
-                        <button 
-                          className="btn btn-danger"
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.8rem', minHeight: '32px' }}
-                          onClick={() => deleteUser(u.id)}
-                        >
-                          Delete
-                        </button>
+                <div key={u.id} className={`card-item ${!u.is_active ? 'opacity-60 grayscale' : ''}`}>
+                   <div className="flex justify-between items-start mb-3">
+                      <div>
+                         <p className="font-bold text-sm">{u.name}</p>
+                         <p className="text-xs text-muted">ID: {u.id} • Pass: {u.password}</p>
                       </div>
-                    )}
-                    {u.role === 'admin' && (
-                      <span className="text-muted" style={{ fontSize: '0.8rem' }}>Protected</span>
-                    )}
-                  </td>
-                </tr>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${u.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                         {u.role.toUpperCase()}
+                      </span>
+                   </div>
+                   {u.role !== 'admin' && (
+                     <div className="flex gap-2 border-t border-slate-50 pt-3 mt-1">
+                        <button className={`btn flex-1 text-xs py-2 ${u.is_active ? 'btn-secondary' : 'btn-outline'}`} onClick={() => toggleActive(u.id)}>
+                           {u.is_active ? 'Deactivate' : 'Activate'}
+                        </button>
+                        <button className="btn btn-danger text-xs px-3" onClick={() => deleteUser(u.id)}>🗑️</button>
+                     </div>
+                   )}
+                </div>
               ))}
-            </tbody>
-          </table>
+           </div>
         </div>
       </div>
     </div>

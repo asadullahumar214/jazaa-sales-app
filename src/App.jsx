@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
-import { initStore, getActiveUser, setActiveUser } from './store';
+import { initStore, getActiveUser, setActiveUser, supabase } from './store';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import OrderBooker from './pages/OrderBooker';
@@ -62,10 +62,10 @@ export default function App() {
   return (
     <BrowserRouter>
       {user && (
-         <nav className="navbar">
-           <div className="font-bold text-xl" style={{ color: 'var(--primary)' }}>
-              Sales Booking app Jazaa
-           </div>
+          <nav className="navbar">
+            <div className="font-bold text-xl" style={{ color: 'var(--primary)', textTransform: 'capitalize' }}>
+               Jazaa sales booking
+            </div>
            <div className="flex gap-4 items-center">
              <span className="text-muted">Welcome, {user.name} ({user.role})</span>
              <button className="btn btn-outline" onClick={handleLogout}>Logout</button>
