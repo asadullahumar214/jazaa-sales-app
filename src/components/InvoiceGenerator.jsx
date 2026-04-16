@@ -113,14 +113,14 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
         row.productName,
         row.productType || 'N',
         row.qty,
-        row.rate.toFixed(2),
-        (row.discPctTP * 100).toFixed(2) + "%",
-        row.afterDiscRate.toFixed(2),
-        row.gstAmt.toFixed(2),
-        (row.afterDiscRate + row.gstAmt).toFixed(2),
-        (row.advPct * 100).toFixed(2) + "%",
-        row.advTaxAmt.toFixed(2),
-        row.total.toFixed(2)
+        row.rate,
+        (row.discPctTP * 100).toFixed(0) + "%",
+        row.afterDiscRate,
+        row.gstAmt,
+        row.amtAfterGst,
+        (row.advPct * 100).toFixed(1) + "%",
+        row.advTaxAmt,
+        row.total
       ]);
       columnStyles = {
         0: { cellWidth: 35, halign: 'left' },
@@ -141,10 +141,10 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
       tableData = invoiceData.map((row) => [
         row.productName,
         row.qty,
-        row.rp.toFixed(2),
-        (row.discPctRP * 100).toFixed(2) + "%",
-        (row.total / row.qty).toFixed(2),
-        row.total.toFixed(2)
+        row.rp,
+        (row.discPctRP * 100).toFixed(0) + "%",
+        Math.round(row.total / row.qty),
+        row.total
       ]);
       columnStyles = {
          0: { halign: 'left' }
@@ -171,7 +171,7 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.text("TOTAL PKR", 138, finalY + 6.5, { align: 'right' });
-    doc.text(`Rs. ${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 167.5, finalY + 6.5, { align: 'center' });
+    doc.text(`Rs. ${Math.round(grandTotal).toLocaleString()}`, 167.5, finalY + 6.5, { align: 'center' });
 
     // Footer lines
     doc.setTextColor(15, 23, 42);
@@ -271,34 +271,36 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                   <td className="p-1 text-center">
                     <input 
                       type="number" 
-                      className="form-input text-xs text-center h-9 min-h-0 p-1" 
+                      className="form-input text-sm text-center h-12 min-h-0 p-1 font-bold" 
+                      style={{ width: '70px' }}
                       value={item.qty} 
                       onChange={(e) => updateItem(index, 'qty', e.target.value)}
                     />
                   </td>
                   <td className="p-1 text-center text-xs">
-                    {product ? (format === 'TP' ? Number(product.rate || 0).toFixed(2) : Number(product.rp || 0).toFixed(2)) : '-'}
+                    {product ? (format === 'TP' ? product.rate : product.rp) : '-'}
                   </td>
                   <td className="p-1 text-center">
                     <input 
                       type="number" 
-                      className="form-input text-xs text-center h-9 min-h-0 p-1" 
+                      className="form-input text-sm text-center h-12 min-h-0 p-1 font-bold" 
+                      style={{ width: '70px' }}
                       value={item.discount} 
                       onChange={(e) => updateItem(index, 'discount', e.target.value)}
                     />
                   </td>
                   {format === 'TP' && (
                     <>
-                      <td className="p-1 text-center text-xs">{rowData?.afterDiscRate.toFixed(2) || '-'}</td>
-                      <td className="p-1 text-center text-xs">{rowData?.gstAmt.toFixed(2) || '-'}</td>
-                      <td className="p-1 text-center text-xs">{rowData?.amtAfterGst.toFixed(2) || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.afterDiscRate || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.gstAmt || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.amtAfterGst || '-'}</td>
                       <td className="p-1 text-center text-xs">{(rowData?.advPct * 100).toFixed(1)}%</td>
-                      <td className="p-1 text-center text-xs">{rowData?.advTaxAmt.toFixed(2) || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.advTaxAmt || '-'}</td>
                     </>
                   )}
                   {format === 'RP' && <td className="p-1 text-center text-xs">{rowData ? (rowData.total / rowData.qty).toFixed(2) : '-'}</td>}
                   <td className="p-1 text-right font-bold text-xs text-primary">
-                    {rowData ? rowData.total.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
+                    {rowData ? rowData.total.toLocaleString() : '0'}
                   </td>
                   <td className="p-1 text-center">
                     <button onClick={() => removeRow(index)} className="text-slate-300 hover:text-red-500 transition-colors">🗑️</button>

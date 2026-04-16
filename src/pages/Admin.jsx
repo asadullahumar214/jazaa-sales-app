@@ -94,6 +94,27 @@ export default function Admin() {
     };
     reader.readAsBinaryString(file);
   };
+  
+  const downloadTemplate = () => {
+    const templateData = [{
+      id: "SKU123",
+      name: "Product Name",
+      brand: "Jazaa",
+      stock: 100,
+      rate: 1500,
+      rp: 1800,
+      product_type: "N",
+      main_qty: 12,
+      foc: 1,
+      min_price_it: 1450,
+      min_price_reg: 1400,
+      min_price_ur: 1500
+    }];
+    const ws = XLSX.utils.json_to_sheet(templateData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Template");
+    XLSX.writeFile(wb, "inventory_template.xlsx");
+  };
 
   const tabStyle = (tab) => ({
     padding: '0.5rem 1rem',
@@ -132,7 +153,6 @@ export default function Admin() {
         <button style={tabStyle('inventory')} onClick={() => setActiveTab('inventory')}>Inventory</button>
         <button style={tabStyle('customers')} onClick={() => setActiveTab('customers')}>Customers</button>
         <button style={tabStyle('users')} onClick={() => setActiveTab('users')}>Users</button>
-        <button style={tabStyle('audit')} onClick={() => setActiveTab('audit')}>Audit</button>
         <button style={tabStyle('reports')} onClick={() => setActiveTab('reports')}>Reports</button>
         <button style={tabStyle('settings')} onClick={() => setActiveTab('settings')}>Settings</button>
       </div>
@@ -207,11 +227,14 @@ export default function Admin() {
                    const update = inventory.map(i => (i.brand || 'Unbranded') === discountUpdate.brand ? { ...i, main_qty: discountUpdate.main_qty, foc: discountUpdate.foc } : i);
                    setLocalInventory(update); await setInventory(update); alert("Updated!");
                 }}>Apply</button>
-                <div className="flex gap-2">
-                   <label className="btn btn-outline text-xs cursor-pointer flex-1 text-center">
-                      📤 Import <input type="file" accept=".xlsx" style={{ display: 'none' }} onChange={handleFileUpload} />
-                   </label>
-                </div>
+                 <div className="flex gap-2">
+                    <button className="btn btn-outline text-[10px] flex-1 text-center py-1" onClick={downloadTemplate}>
+                       📥 Template
+                    </button>
+                    <label className="btn btn-primary text-[10px] cursor-pointer flex-1 text-center py-1">
+                       📤 Import <input type="file" accept=".xlsx" style={{ display: 'none' }} onChange={handleFileUpload} />
+                    </label>
+                 </div>
               </div>
            </div>
 
@@ -252,7 +275,6 @@ export default function Admin() {
 
       {activeTab === 'customers' && <CustomerManager />}
       {activeTab === 'users' && <UserManager />}
-      {activeTab === 'audit' && <AuditLogViewer />}
       {activeTab === 'reports' && <ReportsManager />}
       {activeTab === 'settings' && <SystemSettings />}
     </div>
