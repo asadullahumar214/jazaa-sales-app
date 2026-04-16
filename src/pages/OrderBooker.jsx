@@ -262,7 +262,51 @@ export default function OrderBooker() {
        {/* HISTORY TAB: Past Orders */}
        {activeTab === 'history' && (
          <div className="animate-in">
-            <h3 className="mb-4">My Placed Orders</h3>
+            <h3 className="mb-4 text-slate-800">Field Performance</h3>
+            
+            {/* NEW: Personal EOD Flash Card */}
+            <div className="card !bg-emerald-600 !border-emerald-500 mb-6 shadow-xl shadow-emerald-900/10">
+               <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h4 className="text-[10px] uppercase font-bold text-emerald-100 tracking-[0.2em] mb-1">Your EOD Recap (Today)</h4>
+                    <p className="text-[10px] text-emerald-200">Personal performance snapshot</p>
+                  </div>
+                  <span className="bg-emerald-400/30 text-white text-[9px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md">LIVE</span>
+               </div>
+               
+               <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                     <p className="text-[9px] text-emerald-100 uppercase font-black mb-1">Total Booked</p>
+                     <p className="text-xl font-black text-white">Rs. {todaysSales.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
+                     <p className="text-[9px] text-emerald-100 uppercase font-black mb-1">Confirmed</p>
+                     <p className="text-xl font-black text-white">{pastOrders.filter(o => new Date(o.date).toLocaleDateString() === new Date().toLocaleDateString() && o.status === 'confirmed').length} <span className="text-[11px] font-normal opacity-70">orders</span></p>
+                  </div>
+               </div>
+
+               {(() => {
+                  const todayItems = {};
+                  pastOrders
+                    .filter(o => new Date(o.date).toLocaleDateString() === new Date().toLocaleDateString() && o.status === 'confirmed')
+                    .forEach(o => {
+                      o.items.forEach(i => {
+                        todayItems[i.id] = (todayItems[i.id] || 0) + i.qty;
+                      });
+                    });
+                  const topItemId = Object.entries(todayItems).sort((a,b) => b[1] - a[1])[0]?.[0];
+                  const topItem = inventory.find(i => String(i.id) === String(topItemId));
+                  
+                  if (!topItem) return null;
+                  return (
+                    <div className="mt-4 pt-3 border-t border-white/10 flex justify-between items-center text-white">
+                       <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-100">Your Top Item Today</p>
+                       <p className="text-[10px] font-black truncate max-w-[150px]">{topItem.name} 🛒 {todayItems[topItemId]}</p>
+                    </div>
+                  );
+               })()}
+            </div>
+
             <div className="card-list">
                {pastOrders.length === 0 ? (
                  <div className="card text-center py-8 text-muted text-sm">No orders found.</div>
@@ -280,22 +324,24 @@ export default function OrderBooker() {
                               📅 {orderDate === new Date().toLocaleDateString() ? "Today" : orderDate}
                             </div>
                           )}
-                          <div className="card-item">
+                          <div className="card-item hover:scale-[1.01] transition-transform">
                              <div className="card-item-header">
                                 <div>
-                                   <p className="font-bold text-sm">{o.customerName}</p>
+                                   <p className="font-bold text-sm text-slate-700">{o.customerName}</p>
                                    <p className="text-xs text-muted">{new Date(o.date).toLocaleTimeString()}</p>
                                 </div>
-                                <p className="font-bold text-primary">Rs. {o.totalValue?.toLocaleString()}</p>
+                                <p className="font-black text-primary">Rs. {o.totalValue?.toLocaleString()}</p>
                              </div>
                              <div className="flex justify-between items-center mt-2 pt-2 border-t border-slate-50">
-                                <span className="text-[10px] font-bold uppercase bg-slate-100 px-2 py-0.5 rounded text-slate-500">{o.invoiceFormat}</span>
+                                <span className="text-[10px] font-bold uppercase bg-slate-100 px-2 py-0.5 rounded text-slate-500 tracking-tighter">{o.invoiceFormat} FORMAT</span>
                                 {o.status === 'confirmed' ? (
                                   <div className="flex gap-2 items-center">
                                     <span className="text-[9px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">CONFIRMED</span>
-                                    <button className="btn btn-danger" style={{ minHeight: '28px', height: '28px', fontSize: '0.6rem', padding: '0 0.4rem', borderRadius: '8px' }} onClick={() => handleCancelPlacedOrder(o.id)}>
-                                      Cancel
-                                    </button>
+                                    {user?.can_cancel_orders !== false && (
+                                      <button className="btn !bg-red-50 !text-red-600 hover:!bg-red-600 hover:!text-white border border-red-100" style={{ minHeight: '28px', height: '28px', fontSize: '0.65rem', padding: '0 0.6rem', borderRadius: '8px' }} onClick={() => handleCancelPlacedOrder(o.id)}>
+                                        CANCEL
+                                      </button>
+                                    )}
                                   </div>
                                 ) : (
                                   <span className="text-[9px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full border border-red-200">CANCELLED</span>

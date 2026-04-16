@@ -72,8 +72,11 @@ export default function CustomerManager({ onSelect }) {
     c.phone.includes(searchQuery)
   );
 
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const canRegister = user.role === 'admin' || user.can_register_shops !== false;
+
   // If adding new, show the form
-  if (isAddingNew) {
+  if (isAddingNew && canRegister) {
     return (
       <div className="card mt-4 mb-4 animate-in">
         <div className="flex justify-between items-center mb-6">
@@ -175,7 +178,7 @@ export default function CustomerManager({ onSelect }) {
 
         <div className="card-list" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
           {/* Always show "Add New" if there's a search query */}
-          {searchQuery && (
+          {searchQuery && canRegister && (
              <div 
               className="card-item animate-in" 
               style={{ border: '2px dashed var(--primary-light)', background: 'rgba(59, 130, 246, 0.05)', cursor: 'pointer', textAlign: 'center', padding: '1.5rem' }}
@@ -191,7 +194,7 @@ export default function CustomerManager({ onSelect }) {
           {filteredCustomers.length === 0 && !searchQuery ? (
             <div className="text-center py-12">
                <p className="text-muted italic mb-4">Recent shops will appear here</p>
-               <button className="btn btn-primary" onClick={() => setIsAddingNew(true)}>Register New Shop</button>
+               {canRegister && <button className="btn btn-primary" onClick={() => setIsAddingNew(true)}>Register New Shop</button>}
             </div>
           ) : (
             filteredCustomers.slice().reverse().map(c => (

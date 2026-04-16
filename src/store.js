@@ -21,15 +21,23 @@ export const initStore = () => {
 
 // Users
 export const getUsers = async () => {
-  const { data, error } = await supabase.from('users').select('*');
+  const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
   if (error) console.error(error);
   return data || [];
 };
 
 export const setUsers = async (usersArray) => {
-  // Supabase upsert
   const { error } = await supabase.from('users').upsert(usersArray);
   if (error) console.error(error);
+};
+
+export const updateLastActive = async (userId) => {
+  if (!userId) return;
+  const { error } = await supabase
+    .from('users')
+    .update({ last_active: new Date().toISOString() })
+    .eq('id', userId);
+  if (error) console.error("LastActive Error", error);
 };
 
 // Customers

@@ -16,6 +16,12 @@ export default function SystemSettings() {
     let parsed = parseFloat(value);
     if (isNaN(parsed)) parsed = 0;
     
+    if (!field) {
+        // Direct update for top-level fields
+        setLocalSettings(prev => ({ ...prev, [category]: parsed }));
+        return;
+    }
+
     setLocalSettings(prev => ({
       ...prev,
       [category]: {
@@ -26,13 +32,18 @@ export default function SystemSettings() {
   };
 
   const saveSettings = async () => {
-    await setTaxSettings(settings);
+    // Ensure defaults for intelligence
+    const finalSettings = {
+        ...settings,
+        aging_threshold: settings.aging_threshold || 10
+    };
+    await setTaxSettings(finalSettings);
     await addAuditLog({
       action: 'SETTINGS_UPDATED',
       userId: 'admin',
       details: `Updated tax and system logic configurations.`
     });
-    alert("Settings saved successfully! Future orders will use these rates.");
+    alert("Settings saved successfully!");
   };
 
   if (!settings) return null;
@@ -57,21 +68,39 @@ export default function SystemSettings() {
         Adjust tax percentages across different customer profiles and product types. Values are decimals (e.g., 0.18 for 18%). FOC adjustments should be handled through inventory.
       </p>
 
-      <div className="card mb-6 border-l-4 border-l-primary bg-slate-50">
-        <h4 className="text-sm font-bold uppercase mb-2">App Branding</h4>
-        <div className="flex items-center gap-4">
-           <div className="form-group mb-0">
-             <label className="text-[10px]">Primary Theme Color</label>
-             <input 
-               type="color" 
-               value={settings.primary_color || '#2563eb'} 
-               onChange={e => handleColorChange(e.target.value)}
-               className="h-10 w-20 cursor-pointer rounded border-none p-0"
-             />
-           </div>
-           <p className="text-xs text-muted">This color will be used for buttons, headers, and highlights across the entire app.</p>
-        </div>
-      </div>
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div className="card !bg-slate-50 border-l-4 border-l-primary">
+            <h4 className="text-sm font-bold uppercase mb-2">App Branding</h4>
+            <div className="flex items-center gap-4">
+              <div className="form-group mb-0">
+                <label className="text-[10px]">Primary Theme Color</label>
+                <input 
+                  type="color" 
+                  value={settings.primary_color || '#2563eb'} 
+                  onChange={e => handleColorChange(e.target.value)}
+                  className="h-10 w-20 cursor-pointer rounded border-none p-0"
+                />
+              </div>
+              <p className="text-xs text-muted">This color will be used for buttons and headers.</p>
+            </div>
+          </div>
+
+          <div className="card !bg-amber-50 border-l-4 border-l-amber-400">
+            <h4 className="text-sm font-bold uppercase mb-2 text-amber-900">Business Intelligence</h4>
+            <div className="flex items-center gap-4">
+              <div className="form-group mb-0">
+                <label className="text-[10px] text-amber-700">Slow Moving Threshold (Days)</label>
+                <input 
+                  type="number" 
+                  value={settings.aging_threshold || 10} 
+                  onChange={e => handleChange('aging_threshold', null, e.target.value)}
+                  className="form-input !h-10 !w-24 text-center font-bold"
+                />
+              </div>
+              <p className="text-[11px] text-amber-800">Identify products that haven't sold in this many days in the intelligence reports.</p>
+            </div>
+          </div>
+       </div>
 
       <div className="grid grid-cols-1 md-grid-cols-3 gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {categories.map(({ key, label }) => (

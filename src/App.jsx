@@ -50,6 +50,8 @@ export default function App() {
           handleLogout();
       } else {
           setUser(active);
+          // Ping activity
+          import('./store').then(m => m.updateLastActive(active.id));
       }
     };
 

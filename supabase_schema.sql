@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS public.users (
   is_active boolean DEFAULT true,
   floor_check_enabled boolean DEFAULT true,
   stock_check_enabled boolean DEFAULT true,
+  can_cancel_orders boolean DEFAULT true,
+  can_register_shops boolean DEFAULT true,
+  last_active timestamp with time zone DEFAULT timezone('utc'::text, now()),
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

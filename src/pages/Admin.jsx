@@ -8,6 +8,7 @@ import SystemSettings from '../components/SystemSettings';
 import ReportsManager from '../components/ReportsManager';
 
 export default function Admin() {
+  const [users, setLocalUsers] = useState([]);
   const [inventory, setLocalInventory] = useState([]);
   const [orders, setLocalOrders] = useState([]);
   const [search, setSearch] = useState('');
@@ -16,6 +17,15 @@ export default function Admin() {
   const [brandFilter, setBrandFilter] = useState('All');
   const [discountUpdate, setDiscountUpdate] = useState({ brand: '', main_qty: 12, foc: 0 });
   const [dateFilter, setDateFilter] = useState('Today'); // Today, Yesterday, All
+
+  const stats = useMemo(() => {
+    const todayStr = new Date().toLocaleDateString();
+    const todayOrders = orders.filter(o => o.status === 'confirmed' && new Date(o.date).toLocaleDateString() === todayStr);
+    const revenue = todayOrders.reduce((s,o) => s + (o.totalValue || 0), 0);
+    const lowStock = inventory.filter(i => i.stock <= 5).length;
+    const activeStaff = users.filter(u => u.role === 'orderbooker' && u.is_active).length;
+    return { revenue, lowStock, activeStaff };
+  }, [orders, inventory, users]);
 
   const filteredOrders = useMemo(() => {
     return orders.filter(o => {
@@ -48,8 +58,24 @@ export default function Admin() {
     localStorage.setItem('admin_active_tab', tab);
   };
 
+  const handleGlobalPause = async () => {
+    const active = users.some(u => u.role === 'orderbooker' && u.is_active);
+    const action = active ? 'Deactivate ALL field staff?' : 'Re-activate ALL field staff?';
+    if (!window.confirm(action)) return;
+    
+    const updated = users.map(u => u.role === 'orderbooker' ? { ...u, is_active: !active } : u);
+    setLocalUsers(updated);
+    const { setUsers } = await import('../store');
+    await setUsers(updated);
+    await addAuditLog({ action: active ? 'GLOBAL_PAUSE_ACTIVATED' : 'GLOBAL_PAUSE_DEACTIVATED', userId: 'admin', details: 'Bulk status update performed' });
+    alert("System status updated!");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
+      const { getUsers } = await import('../store');
+      const uData = await getUsers();
+      setLocalUsers(uData);
       const invData = await getInventory();
       setLocalInventory(invData);
       const ordData = await getOrders();
@@ -193,15 +219,33 @@ export default function Admin() {
 
   return (
     <div className="container">
-      <div className="mb-6">
-        <div className="flex justify-between items-end">
+      <div className="mb-8">
+        <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Admin Dashboard</h2>
+            <h2 className="text-2xl font-bold mb-1">Admin Dashboard</h2>
             <p className="text-sm text-muted">Core oversight and system configuration.</p>
           </div>
-          <div className="text-right hidden md:block">
-            <p className="text-[10px] uppercase font-bold text-muted tracking-widest">Global Sales Today</p>
-            <p className="text-2xl font-bold text-primary">Rs. {confirmedOrders.reduce((s,o) => s+(o.totalValue||0),0).toLocaleString()}</p>
+          <button 
+            className={`btn ${users.some(u => u.role === 'orderbooker' && u.is_active) ? 'btn-danger' : 'btn-success'} text-[10px] uppercase font-bold tracking-tighter py-1`}
+            onClick={handleGlobalPause}
+          >
+            {users.some(u => u.role === 'orderbooker' && u.is_active) ? '⏸ Pause All Field Activity' : '▶ Resume All Activity'}
+          </button>
+        </div>
+
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="card-item !bg-emerald-50 !border-emerald-100 p-6">
+            <p className="text-[10px] uppercase font-bold text-emerald-600 mb-1 tracking-widest">Total Revenue Today</p>
+            <p className="text-3xl font-bold text-emerald-900">Rs. {stats.revenue.toLocaleString()}</p>
+          </div>
+          <div className="card-item !bg-blue-50 !border-blue-100 p-6">
+            <p className="text-[10px] uppercase font-bold text-blue-600 mb-1 tracking-widest">Active Staff in Field</p>
+            <p className="text-3xl font-bold text-blue-900">{stats.activeStaff}</p>
+          </div>
+          <div className="card-item !bg-amber-50 !border-amber-100 p-6">
+            <p className="text-[10px] uppercase font-bold text-amber-600 mb-1 tracking-widest">Inventory Alerts</p>
+            <p className="text-3xl font-bold text-amber-900">{stats.lowStock} <span className="text-sm font-normal">Low Items</span></p>
           </div>
         </div>
       </div>
