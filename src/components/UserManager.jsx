@@ -26,7 +26,15 @@ export default function UserManager() {
     if (users.find(u => u.id === id)) return setError(`ID "${id}" exists`);
 
     setSaving(true);
-    const updated = [...users, { id, role: 'orderbooker', name, password: newPassword, is_active: true }];
+    const updated = [...users, { 
+      id, 
+      role: 'orderbooker', 
+      name, 
+      password: newPassword, 
+      is_active: true,
+      floor_check_enabled: true,
+      stock_check_enabled: true
+    }];
     setLocalUsers(updated);
     await setUsers(updated);
     await addAuditLog({ action: 'USER_CREATED', userId: 'admin', details: `Created: ${name} (${id})` });
@@ -40,6 +48,12 @@ export default function UserManager() {
     await setUsers(updated);
     const target = updated.find(u => u.id === userId);
     await addAuditLog({ action: target.is_active ? 'USER_ACTIVATED' : 'USER_DEACTIVATED', userId: 'admin', details: `${target.name} (${userId})` });
+  };
+
+  const toggleGuardrail = async (userId, field) => {
+    const updated = users.map(u => u.id === userId ? { ...u, [field]: !u[field] } : u);
+    setLocalUsers(updated);
+    await setUsers(updated);
   };
 
   const deleteUser = async (userId) => {
@@ -87,14 +101,26 @@ export default function UserManager() {
                          {u.role.toUpperCase()}
                       </span>
                    </div>
-                   {u.role !== 'admin' && (
-                     <div className="flex gap-2 border-t border-slate-50 pt-3 mt-1">
-                        <button className={`btn flex-1 text-xs py-2 ${u.is_active ? 'btn-secondary' : 'btn-outline'}`} onClick={() => toggleActive(u.id)}>
-                           {u.is_active ? 'Deactivate' : 'Activate'}
-                        </button>
-                        <button className="btn btn-danger text-xs px-3" onClick={() => deleteUser(u.id)}>🗑️</button>
-                     </div>
-                   )}
+                    {u.role !== 'admin' && (
+                      <div className="flex flex-col gap-3 border-t border-slate-50 pt-3 mt-1">
+                         <div className="flex gap-4">
+                            <label className="flex items-center gap-2 text-[10px] font-bold cursor-pointer">
+                               <input type="checkbox" checked={u.floor_check_enabled !== false} onChange={() => toggleGuardrail(u.id, 'floor_check_enabled')} />
+                               Enforce Floor
+                            </label>
+                            <label className="flex items-center gap-2 text-[10px] font-bold cursor-pointer">
+                               <input type="checkbox" checked={u.stock_check_enabled !== false} onChange={() => toggleGuardrail(u.id, 'stock_check_enabled')} />
+                               Enforce Stock
+                            </label>
+                         </div>
+                         <div className="flex gap-2">
+                            <button className={`btn flex-1 text-xs py-2 ${u.is_active ? 'btn-secondary' : 'btn-outline'}`} onClick={() => toggleActive(u.id)}>
+                               {u.is_active ? 'Deactivate' : 'Activate'}
+                            </button>
+                            <button className="btn btn-danger text-xs px-3" onClick={() => deleteUser(u.id)}>🗑️</button>
+                         </div>
+                      </div>
+                    )}
                 </div>
               ))}
            </div>

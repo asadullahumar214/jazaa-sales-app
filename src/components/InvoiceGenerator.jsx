@@ -49,7 +49,19 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     return calculateTaxesAndTotals(customer.type, product, parseInt(item.qty || 0), settingsObj, item.discount / 100);
   }).filter(Boolean);
 
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const enforceFloor = currentUser.floor_check_enabled !== false;
+  const enforceStock = currentUser.stock_check_enabled !== false;
+
   const anyBelowFloor = invoiceData.some(row => row.isBelowFloor);
+  const blockedByFloor = enforceFloor && anyBelowFloor;
+
+  const anyOutOfStock = invoiceData.some(row => {
+    const product = inventory.find(p => p.name === row.productName);
+    return product && parseInt(row.qty) > (product.stock || 0);
+  });
+  const blockedByStock = enforceStock && anyOutOfStock;
+
   const grandTotal = invoiceData.reduce((sum, row) => sum + row.total, 0);
 
   const generatePDF = () => {
@@ -250,22 +262,52 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
               return (
                 <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
                   <td className="p-1 sticky-column">
-                    <select 
-                      className="form-select text-xs h-9 min-h-0" 
-                      value={item.productId} 
-                      onChange={(e) => updateItem(index, 'productId', e.target.value)}
-                      style={{ padding: '0 0.5rem' }}
-                    >
-                      <option value="">-- Product --</option>
-                      {inventory.map(p => (
-                        <option key={p.id} value={p.id}>{p.name} ({p.brand})</option>
-                      ))}
-                    </select>
-                    {rowData?.isBelowFloor && (
-                      <div className="text-[0.55rem] text-red-600 font-bold mt-0.5 uppercase">
-                        ⚠️ Below Min (Rs. {rowData.floorPrice})
-                      </div>
-                    )}
+                    <div className="relative group">
+                      <input 
+                        type="text"
+                        placeholder="Search Product..."
+                        className="form-input text-xs h-9 min-h-0 bg-white"
+                        style={{ padding: '0 0.5rem', width: '100%' }}
+                        value={item.searchTerm || (product?.name ? `${product.name} (${product.brand})` : '')}
+                        onChange={(e) => updateItem(index, 'searchTerm', e.target.value)}
+                        onFocus={() => updateItem(index, 'isSearching', true)}
+                      />
+                      
+                      {item.isSearching && (
+                        <div className="absolute top-full left-0 w-full max-h-48 overflow-y-auto bg-white border border-slate-200 shadow-xl z-50 rounded-lg">
+                          {inventory
+                            .filter(p => !item.searchTerm || p.name.toLowerCase().includes(item.searchTerm.toLowerCase()) || p.brand?.toLowerCase().includes(item.searchTerm.toLowerCase()))
+                            .map(p => (
+                              <div 
+                                key={p.id} 
+                                className="p-2 text-xs hover:bg-slate-100 cursor-pointer border-b border-slate-50 flex justify-between gap-2"
+                                onClick={() => {
+                                  updateItem(index, 'productId', p.id);
+                                  updateItem(index, 'searchTerm', '');
+                                  updateItem(index, 'isSearching', false);
+                                }}
+                              >
+                                <div className="font-bold">{p.name} <span className="text-[10px] text-muted font-normal">({p.brand})</span></div>
+                                <div className={`font-bold ${p.stock <= 5 ? 'text-red-600' : 'text-slate-400'}`}>Avl: {p.stock}</div>
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex justify-between items-center mt-1 px-1">
+                       {product && <span className={`text-[10px] font-bold ${product.stock <= 0 ? 'text-red-600' : 'text-slate-400'}`}>Stock: {product.stock}</span>}
+                       {rowData?.isBelowFloor && (
+                        <div className="text-[0.55rem] text-red-600 font-bold uppercase">
+                          ⚠️ Below Min (Rs. {rowData.floorPrice})
+                        </div>
+                       )}
+                       {product && enforceStock && parseInt(item.qty) > product.stock && (
+                         <div className="text-[0.55rem] text-red-600 font-bold uppercase">
+                          🚫 Out of Stock
+                         </div>
+                       )}
+                    </div>
                   </td>
                   {format === 'TP' && <td className="p-1 text-center text-xs opacity-60">{rowData?.productType || '-'}</td>}
                   <td className="p-1 text-center">
@@ -339,20 +381,22 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
             </div>
          </div>
 
-         <div className="mt-8">
+          <div className="mt-8">
             <button 
               className="btn btn-primary w-full py-4 text-lg font-bold shadow-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
-              disabled={anyBelowFloor || items.length === 0 || !items.some(i => i.productId)}
+              disabled={blockedByFloor || blockedByStock || items.length === 0 || !items.some(i => i.productId)}
               onClick={generatePDF}
               style={{
-                opacity: (anyBelowFloor || items.length === 0 || !items.some(i => i.productId)) ? 0.6 : 1,
-                background: anyBelowFloor ? '#94a3b8' : 'var(--primary)',
-                cursor: anyBelowFloor ? 'not-allowed' : 'pointer'
+                opacity: (blockedByFloor || blockedByStock || items.length === 0 || !items.some(i => i.productId)) ? 0.6 : 1,
+                background: (blockedByFloor || blockedByStock) ? '#94a3b8' : 'var(--primary)',
+                cursor: (blockedByFloor || blockedByStock) ? 'not-allowed' : 'pointer'
               }}
             >
-              {anyBelowFloor ? '🚫 Below Floor - Adjust Prices' : '✅ Confirm & Finish Booking'}
+               {blockedByFloor ? '🚫 Below Floor - Adjust Prices' : 
+                blockedByStock ? '🚫 Check Stock - Adjust Quantities' : 
+                '✅ Confirm & Finish Booking'}
             </button>
-         </div>
+          </div>
       </div>
     </div>
   );
