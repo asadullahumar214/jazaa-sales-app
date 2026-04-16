@@ -86,21 +86,21 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
   return {
       productName: product.name,
       qty,
-      rate: Math.round(tp),
-      afterDiscRate: Math.round(afterDiscRate),
+      rate: tp,
+      afterDiscRate: afterDiscRate,
       discPctTP: discAmt / tp,
       gstPct: pType === 'TS' ? 0 : gstPct,
-      gstAmt: Math.round(gstAmt),
-      amtAfterGst: Math.round(afterDiscRate + gstAmt),
+      gstAmt: gstAmt,
+      amtAfterGst: afterDiscRate + gstAmt,
       advPct: advPct,
-      advTaxAmt: Math.round(advTaxAmt),
-      unitTotal: Math.round(targetTotalForOne),
-      total: Math.round(targetTotalForOne * qty),
+      advTaxAmt: advTaxAmt,
+      unitTotal: targetTotalForOne,
+      total: targetTotalForOne * qty,
       isBelowFloor,
-      floorPrice: Math.round(floorPrice),
-      rp: Math.round(product.rp),
+      floorPrice,
+      rp: product.rp,
       productType: pType,
       discPctRP: discPctRP,
-      rateAfterDiscRP: Math.round(targetTotalForOne)
+      rateAfterDiscRP: targetTotalForOne
   };
 };
