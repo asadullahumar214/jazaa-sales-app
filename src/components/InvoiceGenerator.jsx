@@ -64,7 +64,7 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     const fileName = `${fileNameDate}_${customer.name.replace(/\s+/g, '')}_${Math.round(grandTotal)}.pdf`;
 
     // Header Branding
-    doc.setTextColor(29, 78, 216); // var(--primary)
+    doc.setTextColor(29, 78, 216); // Blue
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
     doc.text("3U Enterprises", 15, 20);
@@ -72,12 +72,13 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     doc.setFontSize(9);
     doc.setTextColor(71, 85, 105);
     doc.setFont('helvetica', 'normal');
-    doc.text("Kamaha road New Defence Garden Scheme Lhr", 15, 26);
+    // Using address from Image 1
+    doc.text("Pakistan Central Ideal, Ashiana Quaid road, Ferozpur road, Lahore", 15, 26);
     doc.text("Phone: +92 307 5636773 | NTN # 4545123-2", 15, 30);
 
     doc.setFontSize(24);
     doc.setTextColor(203, 213, 225);
-    doc.text(format === 'TP' ? 'SALES INVOICE (TP)' : 'RETAIL INVOICE (RP)', 195, 24, { align: 'right' });
+    doc.text("INVOICE", 195, 24, { align: 'right' });
 
     doc.setDrawColor(241, 245, 249);
     doc.line(15, 35, 195, 35);
@@ -86,39 +87,68 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     doc.setTextColor(15, 23, 42); 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text("BILL TO:", 15, 43);
+    doc.text("Bill To", 15, 43);
     
     doc.setFontSize(12);
-    doc.text(customer.name, 15, 49);
+    doc.text(customer.name || 'N/A', 15, 49);
     
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Contact: ${customer.phone || 'N/A'}`, 15, 55);
-    doc.text(`Address: ${customer.address || 'N/A'}`, 15, 60);
-    if (customer.ntn || customer.strn) {
-      doc.text(`${customer.strn ? 'STRN' : 'NTN'}: ${customer.strn || customer.ntn}`, 15, 65);
-    }
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    doc.text(`Booker: ${user.name || 'Unknown'}`, 15, 55);
+    doc.text(`${customer.location || customer.address || 'N/A'}`, 15, 60);
+    doc.text(`NTN: ${customer.ntn || 'None'}`, 15, 65);
     
     doc.text(`Date: ${dateFormatted}`, 195, 43, { align: 'right' });
-    doc.text(`Invoice #: JZ-${Date.now().toString().slice(-6)}`, 195, 49, { align: 'right' });
-    doc.setFont('helvetica', 'bold');
+    doc.text(`Invoice #: ${Math.floor(1000 + Math.random() * 9000)}`, 195, 49, { align: 'right' });
     doc.text(`Distributor: 3U Enterprises`, 195, 55, { align: 'right' });
+    doc.setTextColor(234, 179, 8); // Yellow for Brand
+    doc.text(`Brand: Jazaa`, 195, 61, { align: 'right' });
 
-    let headers, tableData;
+    let headers, tableData, columnStyles;
     if (format === 'TP') {
-      headers = [["#", "Product", "Qty", "Rate", "Disc %", "GST Amt", "Adv Tax", "Total"]];
-      tableData = invoiceData.map((row, i) => [
-        i + 1, row.productName, row.qty, row.rate.toLocaleString(),
-        (row.discPctTP * 100).toFixed(1) + "%", row.gstAmt.toFixed(2),
-        row.advTaxAmt.toFixed(1), row.total.toLocaleString(undefined, {minimumFractionDigits: 1})
+      // 11 Columns: Product, Type, Qty, Rate, Disc %, After Disc, GST Amt, Amt after GST, Adv %, Adv Amt, Total
+      headers = [["Product", "Prod type", "Qty", "Rate", "Discount %", "After Disc rate", "GST Amt", "Amt after GST", "Adv tax %", "Adv tax Amt", "Total"]];
+      tableData = invoiceData.map((row) => [
+        row.productName,
+        row.productType || 'N',
+        row.qty,
+        row.rate.toFixed(2),
+        (row.discPctTP * 100).toFixed(2) + "%",
+        row.afterDiscRate.toFixed(2),
+        row.gstAmt.toFixed(2),
+        (row.afterDiscRate + row.gstAmt).toFixed(2),
+        (row.advPct * 100).toFixed(2) + "%",
+        row.advTaxAmt.toFixed(2),
+        row.total.toFixed(2)
       ]);
+      columnStyles = {
+        0: { cellWidth: 35, halign: 'left' },
+        1: { cellWidth: 12, halign: 'center' },
+        2: { cellWidth: 10, halign: 'center' },
+        3: { cellWidth: 15, halign: 'center' },
+        4: { cellWidth: 15, halign: 'center' },
+        5: { cellWidth: 15, halign: 'center' },
+        6: { cellWidth: 15, halign: 'center' },
+        7: { cellWidth: 15, halign: 'center' },
+        8: { cellWidth: 15, halign: 'center' },
+        9: { cellWidth: 15, halign: 'center' },
+        10: { cellWidth: 15, halign: 'center' }
+      };
     } else {
-      headers = [["#", "Product", "Qty", "Retail Price", "Trade Disc", "Net Rate", "Total"]];
-      tableData = invoiceData.map((row, i) => [
-        i + 1, row.productName, row.qty, row.rp.toLocaleString(),
-        (row.discPctRP * 100).toFixed(1) + "%", row.rateAfterDiscRP.toFixed(2),
-        row.total.toLocaleString(undefined, {minimumFractionDigits: 1})
+      // 6 Columns: Product, Qty, RP, Disc % on RP, Rate After Disc, Total
+      headers = [["Product", "Qty", "RP", "Disc % on RP", "Rate After Disc", "Total"]];
+      tableData = invoiceData.map((row) => [
+        row.productName,
+        row.qty,
+        row.rp.toFixed(2),
+        (row.discPctRP * 100).toFixed(2) + "%",
+        (row.total / row.qty).toFixed(2),
+        row.total.toFixed(2)
       ]);
+      columnStyles = {
+         0: { halign: 'left' }
+      };
     }
 
     autoTable(doc, {
@@ -126,16 +156,34 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
       body: tableData,
       startY: 75,
       theme: 'grid',
-      headStyles: { fillColor: [37, 99, 235], fontSize: 8, halign: 'center' },
-      bodyStyles: { fontSize: 8, halign: 'center' },
-      columnStyles: { 1: { halign: 'left' } }
+      styles: { fontSize: 7, cellPadding: 2 },
+      headStyles: { fillColor: [255, 255, 255], textColor: [71, 85, 105], fontStyle: 'bold', halign: 'center', lineWidth: 0.1, lineColor: [226, 232, 240] },
+      bodyStyles: { textColor: [30, 41, 59], halign: 'center', lineWidth: 0.1, lineColor: [226, 232, 240] },
+      columnStyles: columnStyles
     });
 
     const finalY = doc.lastAutoTable.finalY + 10;
-    doc.setFontSize(14);
+    
+    // Total Banner
+    doc.setFillColor(37, 99, 235); // Blue banner
+    doc.rect(140, finalY, 55, 10, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(29, 78, 216);
-    doc.text(`GRAND TOTAL: Rs. ${Math.round(grandTotal).toLocaleString()}`, 195, finalY + 10, { align: 'right' });
+    doc.text("TOTAL PKR", 138, finalY + 6.5, { align: 'right' });
+    doc.text(`Rs. ${grandTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 167.5, finalY + 6.5, { align: 'center' });
+
+    // Footer lines
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(9);
+    doc.text("Received By:", 15, finalY + 25);
+    doc.line(60, finalY + 25, 110, finalY + 25);
+    doc.text("Sign / Stamp:", 15, finalY + 40);
+    doc.line(60, finalY + 40, 110, finalY + 40);
+    
+    doc.setFont('helvetica', 'italic');
+    doc.setTextColor(100, 116, 139);
+    doc.text("Thank you for your business.", 15, finalY + 5);
 
     doc.save(fileName);
     onSend('pdf', `Exported ${format}`, Math.round(grandTotal), format);

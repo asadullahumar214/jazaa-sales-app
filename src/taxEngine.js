@@ -49,6 +49,18 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
     }
     
     targetTotalForOne = Math.round(T); 
+    
+    // GUARDRAIL FIX: Clamp to floor if within rounding tolerance (2.5 rupees) 
+    // This prevents standard orders from being blocked when math naturally falls slightly below floors.
+    let floorPriceTemp = 0;
+    if (shopkeeperType === 'IT') floorPriceTemp = product.min_price_it || 0;
+    else if (shopkeeperType === 'Both') floorPriceTemp = product.min_price_reg || 0;
+    else floorPriceTemp = product.min_price_ur || 0;
+
+    if (targetTotalForOne < floorPriceTemp && (targetTotalForOne >= floorPriceTemp - 2.5)) {
+      targetTotalForOne = floorPriceTemp;
+    }
+
     let ratio = targetTotalForOne / S;
     
     afterDiscRate = tp * ratio;
@@ -87,6 +99,7 @@ export const calculateTaxesAndTotals = (shopkeeperType, product, qty, settingsOb
       isBelowFloor,
       floorPrice,
       rp: product.rp,
+      productType: pType,
       discPctRP: discPctRP,
       rateAfterDiscRP: targetTotalForOne
   };
