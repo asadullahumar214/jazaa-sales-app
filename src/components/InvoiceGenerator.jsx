@@ -211,16 +211,27 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
 
       {/* LINE-BY-LINE ENTRY TABLE */}
       <h3 className="text-sm font-bold mb-3 uppercase text-slate-500 tracking-tight">Invoice Details</h3>
-      <div className="table-responsive" style={{ border: 'none' }}>
-        <table className="w-full">
+      <div className="table-responsive" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <table className="w-full text-nowrap">
           <thead>
-            <tr className="bg-slate-100 text-xs font-bold uppercase text-slate-600">
-              <th className="p-3 text-left">Product</th>
-              <th className="p-3 text-center" style={{ width: '80px' }}>Qty</th>
-              <th className="p-3 text-center" style={{ width: format === 'TP' ? '100px' : '120px' }}>{format === 'TP' ? 'TP Rate' : 'Retail Price'}</th>
-              <th className="p-3 text-center" style={{ width: '90px' }}>Disc %</th>
-              <th className="p-3 text-right">Total</th>
-              <th className="p-3 text-center" style={{ width: '50px' }}></th>
+            <tr className="bg-slate-100 text-[0.65rem] font-bold uppercase text-slate-600">
+              <th className="p-2 text-left" style={{ minWidth: '180px' }}>Product</th>
+              {format === 'TP' && <th className="p-2 text-center">Type</th>}
+              <th className="p-2 text-center" style={{ width: '60px' }}>Qty</th>
+              <th className="p-2 text-center">{format === 'TP' ? 'Rate' : 'RP'}</th>
+              <th className="p-2 text-center" style={{ width: '80px' }}>Disc %</th>
+              {format === 'TP' && (
+                <>
+                  <th className="p-2 text-center">After Disc</th>
+                  <th className="p-2 text-center">GST Amt</th>
+                  <th className="p-2 text-center">After GST</th>
+                  <th className="p-2 text-center">Adv %</th>
+                  <th className="p-2 text-center">Adv Amt</th>
+                </>
+              )}
+              {format === 'RP' && <th className="p-2 text-center">Net Rate</th>}
+              <th className="p-2 text-right">Total</th>
+              <th className="p-2 text-center" style={{ width: '40px' }}></th>
             </tr>
           </thead>
           <tbody>
@@ -230,47 +241,59 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
               
               return (
                 <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                  <td className="p-2">
+                  <td className="p-1">
                     <select 
-                      className="form-select text-sm h-10 min-h-0" 
+                      className="form-select text-xs h-9 min-h-0" 
                       value={item.productId} 
                       onChange={(e) => updateItem(index, 'productId', e.target.value)}
+                      style={{ padding: '0 0.5rem' }}
                     >
-                      <option value="">-- Select Product --</option>
+                      <option value="">-- Product --</option>
                       {inventory.map(p => (
-                        <option key={p.id} value={p.id}>{p.name} ({p.brand}) [Stock: {p.stock}]</option>
+                        <option key={p.id} value={p.id}>{p.name} ({p.brand})</option>
                       ))}
                     </select>
                     {rowData?.isBelowFloor && (
-                      <div className="text-[0.6rem] text-red-600 font-bold mt-1 uppercase animate-pulse">
-                        ⚠️ Below Min Price (Rs. {rowData.floorPrice})
+                      <div className="text-[0.55rem] text-red-600 font-bold mt-0.5 uppercase">
+                        ⚠️ Below Min (Rs. {rowData.floorPrice})
                       </div>
                     )}
                   </td>
-                  <td className="p-2 text-center">
+                  {format === 'TP' && <td className="p-1 text-center text-xs opacity-60">{rowData?.productType || '-'}</td>}
+                  <td className="p-1 text-center">
                     <input 
                       type="number" 
-                      className="form-input text-sm text-center h-10 min-h-0 p-1" 
+                      className="form-input text-xs text-center h-9 min-h-0 p-1" 
                       value={item.qty} 
                       onChange={(e) => updateItem(index, 'qty', e.target.value)}
                     />
                   </td>
-                  <td className="p-2 text-center text-sm font-medium">
-                    {product ? (format === 'TP' ? Number(product.rate || 0).toLocaleString() : Number(product.rp || 0).toLocaleString()) : '-'}
+                  <td className="p-1 text-center text-xs">
+                    {product ? (format === 'TP' ? Number(product.rate || 0).toFixed(2) : Number(product.rp || 0).toFixed(2)) : '-'}
                   </td>
-                  <td className="p-2 text-center">
+                  <td className="p-1 text-center">
                     <input 
                       type="number" 
-                      className="form-input text-sm text-center h-10 min-h-0 p-1" 
+                      className="form-input text-xs text-center h-9 min-h-0 p-1" 
                       value={item.discount} 
                       onChange={(e) => updateItem(index, 'discount', e.target.value)}
                     />
                   </td>
-                  <td className="p-2 text-right font-bold text-sm">
-                    {rowData ? `Rs. ${rowData.total.toLocaleString()}` : '0.00'}
+                  {format === 'TP' && (
+                    <>
+                      <td className="p-1 text-center text-xs">{rowData?.afterDiscRate.toFixed(2) || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.gstAmt.toFixed(2) || '-'}</td>
+                      <td className="p-1 text-center text-xs">{rowData?.amtAfterGst.toFixed(2) || '-'}</td>
+                      <td className="p-1 text-center text-xs">{(rowData?.advPct * 100).toFixed(1)}%</td>
+                      <td className="p-1 text-center text-xs">{rowData?.advTaxAmt.toFixed(2) || '-'}</td>
+                    </>
+                  )}
+                  {format === 'RP' && <td className="p-1 text-center text-xs">{rowData ? (rowData.total / rowData.qty).toFixed(2) : '-'}</td>}
+                  <td className="p-1 text-right font-bold text-xs text-primary">
+                    {rowData ? rowData.total.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                   </td>
-                  <td className="p-2 text-center">
-                    <button onClick={() => removeRow(index)} className="text-red-300 hover:text-red-500 text-lg">🗑️</button>
+                  <td className="p-1 text-center">
+                    <button onClick={() => removeRow(index)} className="text-slate-300 hover:text-red-500 transition-colors">🗑️</button>
                   </td>
                 </tr>
               );
