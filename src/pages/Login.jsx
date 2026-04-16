@@ -58,7 +58,11 @@ export default function Login() {
               className="form-input" 
               placeholder="03XX-XXXXXXX" 
               value={userId}
-              onChange={e => setUserId(formatPhone(e.target.value))}
+              onChange={e => {
+                const val = e.target.value;
+                if (val.startsWith('03')) setUserId(formatPhone(val));
+                else setUserId(val);
+              }}
               required
             />
           </div>
