@@ -38,9 +38,9 @@ export default function SystemSettings() {
   if (!settings) return null;
 
   const categories = [
-    { key: 'registered', label: 'Registered Customers' },
-    { key: 'it', label: 'IT Customers' },
-    { key: 'ur', label: 'UR/Both Customers' }
+    { key: 'ur', label: 'Unregistered (None) ➔ 2.5%' },
+    { key: 'it', label: 'IT Registered ➔ 0.5%' },
+    { key: 'registered', label: 'STRN + IT (Both) ➔ 0.5%' }
   ];
 
   return (

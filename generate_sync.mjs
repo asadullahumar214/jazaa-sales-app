@@ -77,17 +77,27 @@ const supabaseNames = [
   "Assorted Cookies 240GM", "Choco Vanilla Cookies 200GM"
 ];
 
+const nameMap = {
+    "Peshawari Karhai 100GM": "Peshawari Karahi 100GM",
+    "Peshawari Karhai 50GM": "Peshawari Karahi 50GM",
+    "Peshawari Karhai 25GM": "Peshawari Karahi 25GM",
+    "Peshawari Karhai Masala 1KG": "Peshawari Karahi Masala 1KG",
+    "Koyla Karhai 40GM": "Koyla Karhai 40GM",
+    "Koyla Karhai 80GM": "Koyla Karhai 80GM"
+};
+
 const updates = [];
 const misses = [];
 
 supabaseNames.forEach(name => {
-    const match = excelData.find(row => row["__EMPTY"]?.trim().toLowerCase() === name.trim().toLowerCase());
+    const excelName = nameMap[name] || name;
+    const match = excelData.find(row => row["__EMPTY"]?.trim().toLowerCase() === excelName.trim().toLowerCase());
     if (match) {
         updates.push({
             name,
-            min_ur: match["__EMPTY_20"] || 0,
-            min_it: match["__EMPTY_27"] || 0,
-            min_reg: match["__EMPTY_34"] || 0
+            min_ur: Math.round(Number(match["__EMPTY_20"] || 0)),
+            min_it: Math.round(Number(match["__EMPTY_27"] || 0)),
+            min_reg: Math.round(Number(match["__EMPTY_34"] || 0))
         });
     } else {
         misses.push(name);

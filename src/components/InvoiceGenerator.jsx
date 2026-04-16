@@ -1,352 +1,278 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { calculateTaxesAndTotals } from '../taxEngine';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-export default function InvoiceGenerator({ cart, customer, settingsObj, onSend, onCancel }) {
-  const [format, setFormat] = useState('TP'); // 'TP', 'RP', 'ECOMM', 'GRN'
+export default function InvoiceGenerator({ customer, inventory, settingsObj, onSend, onCancel, initialCart = [] }) {
+  const [format, setFormat] = useState('TP'); // 'TP', 'RP'
+  const [items, setItems] = useState([]);
+
+  // Initialize with initialCart or one empty row
+  useEffect(() => {
+    if (initialCart.length > 0) {
+      setItems(initialCart.map(c => ({
+        productId: String(c.id),
+        qty: c.qty,
+        discount: c.discount || 0
+      })));
+    } else {
+      setItems([{ productId: '', qty: 1, discount: 0 }]);
+    }
+  }, [initialCart]);
 
   if (!customer) {
-    return <div className="p-4 text-center">Please select a customer to generate invoice.</div>;
+    return <div className="p-4 text-center text-muted">Please select a customer first.</div>;
   }
 
-  const invoiceData = cart.map(item => {
-    return calculateTaxesAndTotals(customer.type, item.product, item.qty, settingsObj);
-  });
+  const addRow = () => {
+    setItems([...items, { productId: '', qty: 1, discount: 0 }]);
+  };
+
+  const removeRow = (index) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  const updateItem = (index, field, value) => {
+    const newItems = [...items];
+    newItems[index][field] = value;
+    setItems(newItems);
+  };
+
+  // Calculate row data
+  const invoiceData = items.map(item => {
+    const product = inventory.find(p => String(p.id) === String(item.productId));
+    if (!product) return null;
+    
+    // Inject discount into calculation
+    // Note: taxEngine might need a small adjustment to accept manual discount pct
+    // For now, we manually handle discount override if needed, or pass it in
+    return calculateTaxesAndTotals(customer.type, product, parseInt(item.qty || 0), settingsObj, item.discount / 100);
+  }).filter(Boolean);
 
   const anyBelowFloor = invoiceData.some(row => row.isBelowFloor);
-
   const grandTotal = invoiceData.reduce((sum, row) => sum + row.total, 0);
-  const ecommCommission = grandTotal * 0.05;
-  const ecommFinal = grandTotal + ecommCommission;
 
-    const generatePDF = () => {
+  const generatePDF = () => {
     const doc = new jsPDF('p', 'mm', 'a4');
     const date = new Date();
     
-    // Standard Date Format: 15-Apr-2024
     const dateFormatted = date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+      day: '2-digit', month: 'short', year: 'numeric'
     }).replace(/ /g, '-');
     
-    // File Name format: 15-Apr-24_CustomerName_1234.pdf
     const fileNameDate = dateFormatted.replace(/-/g, '').toLowerCase();
-    const displayTotal = format === 'ECOMM' ? ecommFinal : grandTotal;
-    const fileName = `${fileNameDate}_${customer.name.replace(/\s+/g, '')}_${Math.round(displayTotal)}.pdf`;
+    const fileName = `${fileNameDate}_${customer.name.replace(/\s+/g, '')}_${Math.round(grandTotal)}.pdf`;
 
-    // Branding Header
-    doc.setTextColor(37, 99, 235); // Primary Blue
-    doc.setFontSize(24);
+    // Header Branding
+    doc.setTextColor(29, 78, 216); // var(--primary)
+    doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
     doc.text("3U Enterprises", 15, 20);
     
     doc.setFontSize(9);
-    doc.setTextColor(71, 85, 105); // Text Slate 600
+    doc.setTextColor(71, 85, 105);
     doc.setFont('helvetica', 'normal');
     doc.text("Kamaha road New Defence Garden Scheme Lhr", 15, 26);
-    doc.text("Phone: +92 307 5636773", 15, 30);
-    
-    // Display NTN/STRN if available
-    doc.text(`NTN # 4545123-2`, 15, 34);
+    doc.text("Phone: +92 307 5636773 | NTN # 4545123-2", 15, 30);
 
-    // Document Title
-    doc.setFontSize(28);
-    doc.setTextColor(203, 213, 225); // Slate 300
-    const docTitle = format === 'GRN' ? 'GRN / DC' : format === 'ECOMM' ? 'ECOMMERCE INVOICE' : 'SALES INVOICE';
-    doc.text(docTitle, 195, 24, { align: 'right' });
+    doc.setFontSize(24);
+    doc.setTextColor(203, 213, 225);
+    doc.text(format === 'TP' ? 'SALES INVOICE (TP)' : 'RETAIL INVOICE (RP)', 195, 24, { align: 'right' });
 
-    // Customer & Metadata Section
     doc.setDrawColor(241, 245, 249);
-    doc.line(15, 40, 195, 40);
+    doc.line(15, 35, 195, 35);
 
+    // Customer Detail Header
     doc.setTextColor(15, 23, 42); 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text("BILL TO:", 15, 48);
+    doc.text("BILL TO:", 15, 43);
     
     doc.setFontSize(12);
-    doc.text(customer.name, 15, 54);
+    doc.text(customer.name, 15, 49);
     
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Contact: ${customer.phone || 'N/A'}`, 15, 60);
-    doc.text(`Address: ${customer.location || 'N/A'}`, 15, 65);
+    doc.text(`Contact: ${customer.phone || 'N/A'}`, 15, 55);
+    doc.text(`Address: ${customer.address || 'N/A'}`, 15, 60);
     if (customer.ntn || customer.strn) {
-      doc.text(`${customer.strn ? 'STRN' : 'NTN'}: ${customer.strn || customer.ntn}`, 15, 70);
+      doc.text(`${customer.strn ? 'STRN' : 'NTN'}: ${customer.strn || customer.ntn}`, 15, 65);
     }
     
-    doc.setFontSize(9);
-    doc.text(`Date: ${dateFormatted}`, 195, 48, { align: 'right' });
-    doc.text(`Invoice #: JZ-${Date.now().toString().slice(-6)}`, 195, 54, { align: 'right' });
+    doc.text(`Date: ${dateFormatted}`, 195, 43, { align: 'right' });
+    doc.text(`Invoice #: JZ-${Date.now().toString().slice(-6)}`, 195, 49, { align: 'right' });
     doc.setFont('helvetica', 'bold');
-    doc.text(`Distributor: 3U Enterprises`, 195, 60, { align: 'right' });
-    doc.setTextColor(180, 83, 9); // Amber 700
-    doc.text(`Product Brand: Jazaa`, 195, 66, { align: 'right' });
+    doc.text(`Distributor: 3U Enterprises`, 195, 55, { align: 'right' });
 
-    let headers, data;
-
+    let headers, tableData;
     if (format === 'TP') {
-      headers = [["#", "Product", "Type", "Qty", "Rate", "Disc", "GST", "Adv", "Total"]];
-      data = invoiceData.map((row, i) => [
-        i + 1,
-        cart[i].product.name,
-        cart[i].product.product_type,
-        cart[i].qty,
-        row.rate.toLocaleString(),
-        (row.discPctTP * 100).toFixed(1) + "%",
-        row.gstAmt.toFixed(2),
-        row.advTaxAmt.toFixed(1),
-        row.total.toLocaleString(undefined, {minimumFractionDigits: 2})
+      headers = [["#", "Product", "Qty", "Rate", "Disc %", "GST Amt", "Adv Tax", "Total"]];
+      tableData = invoiceData.map((row, i) => [
+        i + 1, row.productName, row.qty, row.rate.toLocaleString(),
+        (row.discPctTP * 100).toFixed(1) + "%", row.gstAmt.toFixed(2),
+        row.advTaxAmt.toFixed(1), row.total.toLocaleString(undefined, {minimumFractionDigits: 1})
       ]);
-    } else if (format === 'RP') {
+    } else {
       headers = [["#", "Product", "Qty", "Retail Price", "Trade Disc", "Net Rate", "Total"]];
-      data = invoiceData.map((row, i) => [
-        i + 1,
-        cart[i].product.name,
-        cart[i].qty,
-        row.rp.toLocaleString(),
-        (row.discPctRP * 100).toFixed(1) + "%",
-        row.rateAfterDiscRP.toFixed(2),
-        row.total.toLocaleString(undefined, {minimumFractionDigits: 2})
-      ]);
-    } else if (format === 'ECOMM') {
-      headers = [["#", "Product", "Qty", "Rate", "GST", "Total", "Comm(5%)", "Final"]];
-      data = invoiceData.map((row, i) => {
-        const comm = row.total * 0.05;
-        return [
-          i + 1,
-          cart[i].product.name,
-          cart[i].qty,
-          row.rate.toLocaleString(),
-          row.gstAmt.toFixed(2),
-          row.total.toLocaleString(),
-          comm.toFixed(2),
-          (row.total + comm).toLocaleString(undefined, {minimumFractionDigits: 2})
-        ];
-      });
-    } else if (format === 'GRN') {
-      headers = [["#", "Product", "Booked Qty", "FOC", "Total Units"]];
-      data = invoiceData.map((row, i) => [
-        i + 1,
-        cart[i].product.name,
-        cart[i].qty,
-        cart[i].product.foc || 0,
-        (cart[i].qty + (cart[i].product.foc || 0))
+      tableData = invoiceData.map((row, i) => [
+        i + 1, row.productName, row.qty, row.rp.toLocaleString(),
+        (row.discPctRP * 100).toFixed(1) + "%", row.rateAfterDiscRP.toFixed(2),
+        row.total.toLocaleString(undefined, {minimumFractionDigits: 1})
       ]);
     }
 
     autoTable(doc, {
       head: headers,
-      body: data,
+      body: tableData,
       startY: 75,
       theme: 'grid',
-      headStyles: { fillColor: [37, 99, 235], fontSize: 8, halign: 'center', cellPadding: 3 },
-      bodyStyles: { fontSize: 8, halign: 'center', cellPadding: 2.5 },
-      columnStyles: { 
-        1: { halign: 'left', cellWidth: 'auto' },
-        0: { cellWidth: 8 }
-      }
+      headStyles: { fillColor: [37, 99, 235], fontSize: 8, halign: 'center' },
+      bodyStyles: { fontSize: 8, halign: 'center' },
+      columnStyles: { 1: { halign: 'left' } }
     });
 
     const finalY = doc.lastAutoTable.finalY + 10;
-    
-    // Summary Box
-    doc.setDrawColor(241, 245, 249);
-    doc.setFillColor(248, 250, 252);
-    doc.rect(130, finalY, 65, 35, 'F');
-    
-    doc.setFontSize(9);
-    doc.setTextColor(71, 85, 105);
-    doc.setFont('helvetica', 'normal');
-    
-    const subtotalText = format === 'ECOMM' ? grandTotal : invoiceData.reduce((s,r) => s + (r.total), 0);
-    
-    doc.text(`Subtotal:`, 135, finalY + 8);
-    doc.text(`Rs. ${Math.round(subtotalText).toLocaleString()}`, 190, finalY + 8, { align: 'right' });
-    
-    if (format === 'TP') {
-        const gstTotal = invoiceData.reduce((s,r) => s + r.gstAmt * r.qty, 0);
-        const advTotal = invoiceData.reduce((s,r) => s + r.advTaxAmt * r.qty, 0);
-        doc.text(`Total GST:`, 135, finalY + 14);
-        doc.text(`+ Rs. ${Math.round(gstTotal).toLocaleString()}`, 190, finalY + 14, { align: 'right' });
-    }
-
-    if (format === 'ECOMM') {
-        doc.text(`Commission (5%):`, 135, finalY + 14);
-        doc.text(`+ Rs. ${Math.round(ecommCommission).toLocaleString()}`, 190, finalY + 14, { align: 'right' });
-    }
-
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(37, 99, 235);
-    doc.text(`GRAND TOTAL`, 135, finalY + 25);
-    doc.text(`Rs. ${Math.round(displayTotal).toLocaleString()}`, 190, finalY + 25, { align: 'right' });
-    
-    doc.setFontSize(8);
-    doc.setTextColor(148, 163, 184);
-    doc.setFont('helvetica', 'italic');
-    doc.text(`Items: ${invoiceData.length} | Units: ${cart.reduce((s,i)=>s+i.qty, 0)}`, 190, finalY + 32, { align: 'right' });
-
-    // Footer lines
-    doc.setFontSize(9);
-    doc.setTextColor(100, 116, 139);
-    doc.text("Prepared By: Jazaa Sales App", 15, 280);
-    doc.text("Received By: ___________________", 110, finalY + 30);
-    doc.text("Sign / Stamp: ___________________", 110, finalY + 40);
+    doc.setTextColor(29, 78, 216);
+    doc.text(`GRAND TOTAL: Rs. ${Math.round(grandTotal).toLocaleString()}`, 195, finalY + 10, { align: 'right' });
 
     doc.save(fileName);
-    
-    // Save to Supabase
-    onSend('pdf', `Exported ${format}`, displayTotal, format);
+    onSend('pdf', `Exported ${format}`, Math.round(grandTotal), format);
   };
 
   return (
-    <div className="card mt-4 overflow-hidden">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <div>
-          <h3 className="text-xl font-bold">Invoice Preview</h3>
-          <p className="text-sm text-muted">Customer: {customer.name}</p>
+    <div className="card animate-in premium-card">
+      {/* PROFESSIONAL CUSTOMER HEADER */}
+      <div className="customer-header-card mb-6 relative">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+             <p className="sales-label">Customer / Shop</p>
+             <h3 className="portal-title" style={{ fontSize: '1.4rem' }}>{customer.name}</h3>
+             <p className="portal-subtitle">📍 {customer.address || 'Address not added'}</p>
+          </div>
+          <div className="sales-pill">
+             <div className="flex flex-col gap-1">
+                <p className="text-xs"><strong>📞</strong> {customer.phone || 'N/A'}</p>
+                <p className="text-xs"><strong>🏪</strong> {customer.shop_type || customer.type}</p>
+             </div>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-          {['RP', 'TP', 'ECOMM', 'GRN'].map(f => (
-            <button 
-              key={f}
-              className={`btn ${format === f ? 'btn-primary' : 'btn-outline'}`} 
-              style={{ minHeight: '40px', padding: '0 1rem', fontSize: '0.85rem' }}
-              onClick={() => setFormat(f)}
-            >
-              {f} Format
-            </button>
-          ))}
-        </div>
+        <button onClick={onCancel} className="absolute top-2 right-4 text-slate-300 hover:text-red-500 transition-colors text-xl">✕</button>
       </div>
 
-      {anyBelowFloor && (
-        <div className="card bg-red-50 border-red-200 mb-6 p-4 animate-in shadow-lg" style={{ borderLeft: '4px solid #ef4444' }}>
-           <div className="flex items-center gap-2 mb-1">
-             <span className="text-xl">⚠️</span>
-             <p className="text-red-800 text-sm font-bold uppercase tracking-wide">Security & Discount Guardrail Violation</p>
-           </div>
-           <p className="text-red-700 text-xs leading-relaxed">
-             One or more items in your cart are priced <strong>below the official Jazaa Floor Price</strong> for this customer category. 
-             Order confirmation is blocked until prices are adjusted to meet minimum profit thresholds.
-           </p>
-        </div>
-      )}
-
-      <div className="table-responsive" style={{ marginBottom: '1.5rem' }}>
-        <table>
+      {/* LINE-BY-LINE ENTRY TABLE */}
+      <h3 className="text-sm font-bold mb-3 uppercase text-slate-500 tracking-tight">Invoice Details</h3>
+      <div className="table-responsive" style={{ border: 'none' }}>
+        <table className="w-full">
           <thead>
-            {format === 'TP' && (
-              <tr>
-                <th>Product</th><th>Type</th><th>Qty</th><th>Rate</th><th>Disc %</th><th>GST Amt</th><th>Adv Tax</th><th>Total</th>
-              </tr>
-            )}
-            {format === 'RP' && (
-              <tr>
-                <th>Product</th><th>Qty</th><th>RP</th><th>Disc %</th><th>After Disc</th><th>Total</th>
-              </tr>
-            )}
-            {format === 'ECOMM' && (
-              <tr>
-                <th>Product</th><th>Qty</th><th>Rate</th><th>GST</th><th>Base Total</th><th>Comm(5%)</th><th>Final</th>
-              </tr>
-            )}
-            {format === 'GRN' && (
-              <tr>
-                <th>Product</th><th>Qty</th><th>FOC</th><th>Total (N+F)</th>
-              </tr>
-            )}
+            <tr className="bg-slate-100 text-xs font-bold uppercase text-slate-600">
+              <th className="p-3 text-left">Product</th>
+              <th className="p-3 text-center" style={{ width: '80px' }}>Qty</th>
+              <th className="p-3 text-center" style={{ width: format === 'TP' ? '100px' : '120px' }}>{format === 'TP' ? 'TP Rate' : 'Retail Price'}</th>
+              <th className="p-3 text-center" style={{ width: '90px' }}>Disc %</th>
+              <th className="p-3 text-right">Total</th>
+              <th className="p-3 text-center" style={{ width: '50px' }}></th>
+            </tr>
           </thead>
           <tbody>
-            {invoiceData.map((row, i) => (
-              <tr key={i} className={row.isBelowFloor ? 'bg-red-50' : ''}>
-                <td>
-                  {cart[i].product.name}
-                  {row.isBelowFloor && (
-                    <div className="text-[0.65rem] text-red-600 font-bold">
-                      MIN ALLOWED: Rs. {row.floorPrice}
-                    </div>
-                  )}
-                </td>
-                {format === 'TP' && (
-                  <>
-                    <td>{cart[i].product.product_type}</td>
-                    <td>{cart[i].qty}</td>
-                    <td>{row.rate.toFixed(2)}</td>
-                    <td>{(row.discPctTP * 100).toFixed(1)}%</td>
-                    <td>{row.gstAmt.toFixed(2)}</td>
-                    <td>{row.advTaxAmt.toFixed(2)}</td>
-                  </>
-                )}
-                {format === 'RP' && (
-                  <>
-                    <td>{cart[i].qty}</td>
-                    <td>{row.rp.toFixed(2)}</td>
-                    <td>{(row.discPctRP * 100).toFixed(1)}%</td>
-                    <td>{row.rateAfterDiscRP.toFixed(2)}</td>
-                  </>
-                )}
-                {format === 'ECOMM' && (
-                  <>
-                    <td>{cart[i].qty}</td>
-                    <td>{row.rate.toFixed(2)}</td>
-                    <td>{row.gstAmt.toFixed(2)}</td>
-                    <td>{row.total.toFixed(2)}</td>
-                    <td>{(row.total * 0.05).toFixed(2)}</td>
-                  </>
-                )}
-                {format === 'GRN' && (
-                  <>
-                    <td>{cart[i].qty}</td>
-                    <td>{cart[i].product.foc || 0}</td>
-                    <td>{cart[i].qty + (cart[i].product.foc || 0)}</td>
-                  </>
-                )}
-                <td className="font-bold">
-                  Rs. {format === 'ECOMM' ? (row.total * 1.05).toFixed(2) : format === 'GRN' ? '-' : row.total.toFixed(2)}
-                </td>
-              </tr>
-            ))}
+            {items.map((item, index) => {
+              const product = inventory.find(p => String(p.id) === String(item.productId));
+              const rowData = product ? calculateTaxesAndTotals(customer.type, product, parseInt(item.qty || 0), settingsObj, (item.discount || 0) / 100) : null;
+              
+              return (
+                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  <td className="p-2">
+                    <select 
+                      className="form-select text-sm h-10 min-h-0" 
+                      value={item.productId} 
+                      onChange={(e) => updateItem(index, 'productId', e.target.value)}
+                    >
+                      <option value="">-- Select Product --</option>
+                      {inventory.map(p => (
+                        <option key={p.id} value={p.id}>{p.name} ({p.brand}) [Stock: {p.stock}]</option>
+                      ))}
+                    </select>
+                    {rowData?.isBelowFloor && (
+                      <div className="text-[0.6rem] text-red-600 font-bold mt-1 uppercase animate-pulse">
+                        ⚠️ Below Min Price (Rs. {rowData.floorPrice})
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-2 text-center">
+                    <input 
+                      type="number" 
+                      className="form-input text-sm text-center h-10 min-h-0 p-1" 
+                      value={item.qty} 
+                      onChange={(e) => updateItem(index, 'qty', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2 text-center text-sm font-medium">
+                    {product ? (format === 'TP' ? Number(product.rate || 0).toLocaleString() : Number(product.rp || 0).toLocaleString()) : '-'}
+                  </td>
+                  <td className="p-2 text-center">
+                    <input 
+                      type="number" 
+                      className="form-input text-sm text-center h-10 min-h-0 p-1" 
+                      value={item.discount} 
+                      onChange={(e) => updateItem(index, 'discount', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2 text-right font-bold text-sm">
+                    {rowData ? `Rs. ${rowData.total.toLocaleString()}` : '0.00'}
+                  </td>
+                  <td className="p-2 text-center">
+                    <button onClick={() => removeRow(index)} className="text-red-300 hover:text-red-500 text-lg">🗑️</button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
-      <div className="flex flex-col items-end gap-2 mb-6">
-        {format === 'ECOMM' && (
-          <div className="text-muted">Base Total: Rs. {grandTotal.toFixed(2)}</div>
-        )}
-        <div className="text-2xl font-bold">
-           TOTAL: <span className="text-primary">Rs. {(format === 'ECOMM' ? ecommFinal : grandTotal).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-        </div>
-      </div>
+      <button onClick={addRow} className="btn btn-outline w-full mt-4 border-dashed border-2 hover:border-primary hover:text-primary py-2 text-sm font-bold">
+        + Add New Line
+      </button>
 
-      <div className="flex gap-4" style={{ flexWrap: 'wrap' }}>
-         <button className="btn btn-outline" onClick={onCancel} style={{ flex: 1 }}>Discard Order</button>
-          <button 
-            className="btn btn-primary" 
-            onClick={generatePDF} 
-            style={{ 
-              flex: 3, 
-              padding: '1rem', 
-              fontSize: '1.1rem', 
-              fontWeight: 'bold',
-              opacity: anyBelowFloor ? 0.6 : 1,
-              background: anyBelowFloor ? '#94a3b8' : 'var(--primary)',
-              cursor: anyBelowFloor ? 'not-allowed' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px'
-            }}
-            disabled={anyBelowFloor}
-          >
-             {anyBelowFloor ? '🚫 Order Blocked (Below Floor)' : '✅ Confirm & Export PDF'}
-          </button>
+      {/* FOOTER & EXPORT */}
+      <div className="mt-8 pt-6 border-t border-slate-200">
+         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+            <div className="flex gap-2">
+               {['TP', 'RP'].map(f => (
+                 <button 
+                  key={f} 
+                  onClick={() => setFormat(f)}
+                  className={`btn ${format === f ? 'btn-primary' : 'btn-outline'}`}
+                  style={{ minHeight: '40px', padding: '0 1rem', fontSize: '0.8rem' }}
+                 >
+                   {f} Format
+                 </button>
+               ))}
+            </div>
+            
+            <div className="text-right">
+               <p className="text-xs text-muted uppercase font-bold mb-1 tracking-widest">Grand Total</p>
+               <h2 className="text-3xl font-bold text-primary">Rs. {Math.round(grandTotal).toLocaleString()}</h2>
+               <p className="text-[0.65rem] text-muted italic mt-1">Inclusive of all taxes & discounts</p>
+            </div>
+         </div>
+
+         <div className="mt-8">
+            <button 
+              className="btn btn-primary w-full py-4 text-lg font-bold shadow-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98]"
+              disabled={anyBelowFloor || items.length === 0 || !items.some(i => i.productId)}
+              onClick={generatePDF}
+              style={{
+                opacity: (anyBelowFloor || items.length === 0 || !items.some(i => i.productId)) ? 0.6 : 1,
+                background: anyBelowFloor ? '#94a3b8' : 'var(--primary)',
+                cursor: anyBelowFloor ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {anyBelowFloor ? '🚫 Below Floor - Adjust Prices' : '✅ Confirm & Finish Booking'}
+            </button>
+         </div>
       </div>
     </div>
   );
 }
-

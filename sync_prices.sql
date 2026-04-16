@@ -150,6 +150,7 @@ UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Karachi Biryani Masala 120GM';
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Koyla Karhai 80GM';
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Mughlai Qorma 100GM';
+UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Peshawari Karhai 100GM';
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Riwaiti Achar Gosht 100GM';
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Shahi Seekh Kabab 100GM';
 UPDATE inventory SET min_price_ur = 186, min_price_it = 182, min_price_reg = 182 WHERE name = 'Shami Kabab 100GM';
