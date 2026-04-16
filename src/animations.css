@@ -1,0 +1,87 @@
+
+/* SWIPE TO DELETE UI */
+.swipe-row {
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+.swipe-content {
+  display: flex !important;
+  transition: transform 0.3s ease;
+  width: 100%;
+}
+.swipe-delete-btn {
+  position: absolute;
+  right: -80px;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  background: #ef4444; /* Danger Red */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: right 0.3s ease;
+  z-index: 10;
+  border: none;
+  font-size: 1.2rem;
+}
+.swipe-row.swiped .swipe-content {
+  transform: translateX(-80px);
+}
+.swipe-row.swiped .swipe-delete-btn {
+  right: 0;
+}
+
+@keyframes onboarding-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb, 37, 99, 235), 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(var(--primary-rgb, 37, 99, 235), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--primary-rgb, 37, 99, 235), 0); }
+}
+
+.onboarding-pulse {
+  animation: onboarding-pulse 2s infinite;
+  border-radius: 12px;
+}
+
+.animate-in-top {
+  animation: slideInFromTop 0.3s ease-out forwards;
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* SUCCESS CHECKMARK ANIMATION */
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkmark-container {
+  width: 120px;
+  height: 120px;
+  background: #10b981;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+.checkmark-container span {
+  font-size: 60px;
+  color: white;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

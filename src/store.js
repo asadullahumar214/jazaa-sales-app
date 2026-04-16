@@ -64,6 +64,20 @@ export const getOrders = async () => {
 };
 
 export const saveOrder = async (order) => {
+  // 0. Duplicate Prevention (Same customer + same total within 5 mins)
+  const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+  const { data: duplicates } = await supabase.from('orders')
+    .select('id')
+    .eq('customerId', order.customerId)
+    .eq('totalValue', order.totalValue)
+    .gte('date', fiveMinsAgo);
+    
+  if (duplicates && duplicates.length > 0) {
+    if (!window.confirm("A similar order was already placed for this shop in the last 5 minutes. Do you want to save this as a separate new order?")) {
+      return { cancelled: true };
+    }
+  }
+
   // 1. Execute atomic stock deduction for each item
   const validItems = (order.items || []).filter(item => item && item.id && (item.qty || 0) > 0);
   
@@ -88,6 +102,7 @@ export const saveOrder = async (order) => {
     customerName: order.customerName,
     status: 'confirmed',
     totalValue: order.totalValue,
+    subtotalAfterDiscount: order.subtotalAfterDiscount, // New field for targets
     invoiceFormat: order.invoiceFormat,
     items: order.items,
     date: new Date().toISOString()
@@ -157,4 +172,12 @@ export const getTaxSettings = async () => {
 export const setTaxSettings = async (settings) => {
   const { error } = await supabase.from('settings').upsert([{ id: true, config: settings }]);
   if (error) console.error(error);
+};
+
+export const logVisit = async (visitObj) => {
+  await addAuditLog({
+    action: 'VISIT_NO_ORDER',
+    userId: visitObj.userId,
+    details: `Visited: ${visitObj.customerName} (No Order placed)`
+  });
 };

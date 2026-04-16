@@ -7,7 +7,15 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+
+  const formatPhone = (val) => {
+    const cleaned = ('' + val).replace(/\D/g, '');
+    if (cleaned.length <= 4) return cleaned;
+    if (cleaned.length <= 11) return `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 11)}`;
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,7 +23,7 @@ export default function Login() {
     try {
       setLoading(true);
       const users = await getUsers();
-      const foundUser = users.find(u => u.id === userId && u.password === password);
+      const foundUser = users.find(u => (String(u.id) === String(userId) || String(u.phone) === String(userId)) && u.password === password);
 
       if (foundUser) {
           if (!foundUser.is_active) {
@@ -48,22 +56,29 @@ export default function Login() {
             <input 
               type="text" 
               className="form-input" 
-              placeholder="e.g. admin or shan" 
+              placeholder="03XX-XXXXXXX" 
               value={userId}
-              onChange={e => setUserId(e.target.value)}
+              onChange={e => setUserId(formatPhone(e.target.value))}
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group" style={{ position: 'relative' }}>
             <label>Password</label>
             <input 
-              type="password" 
+              type={showPassword ? "text" : "password"} 
               className="form-input" 
               placeholder="Enter password" 
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
             />
+            <button 
+              type="button" 
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ position: 'absolute', right: '10px', top: '34px', background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {showPassword ? '🐵' : '🙈'}
+            </button>
           </div>
           <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%' }}>
             {loading ? 'Logging in...' : 'Login'}

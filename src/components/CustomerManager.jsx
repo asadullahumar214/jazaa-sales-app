@@ -17,6 +17,14 @@ export default function CustomerManager({ onSelect }) {
 
   const [isAddingNew, setIsAddingNew] = useState(false);
 
+  const formatPhone = (val) => {
+    // Remove all non-digits
+    const cleaned = ('' + val).replace(/\D/g, '');
+    if (cleaned.length <= 4) return cleaned;
+    if (cleaned.length <= 11) return `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 11)}`;
+  };
+
   useEffect(() => {
     const fetchCusts = async () => {
       const data = await getCustomers();
@@ -53,9 +61,10 @@ export default function CustomerManager({ onSelect }) {
   );
 
   const handleEditPhone = (id, newPhone) => {
-    const updated = customers.map(c => String(c.id) === String(id) ? { ...c, phone: newPhone } : c);
+    const formatted = formatPhone(newPhone);
+    const updated = customers.map(c => String(c.id) === String(id) ? { ...c, phone: formatted } : c);
     setLocalCustomers(updated);
-    debouncedPhoneUpdate(id, newPhone, updated);
+    debouncedPhoneUpdate(id, formatted, updated);
   };
 
   const filteredCustomers = customers.filter(c => 
@@ -79,7 +88,14 @@ export default function CustomerManager({ onSelect }) {
           </div>
           <div className="form-group">
             <label>Mobile Number</label>
-            <input required type="text" className="form-input" value={newCustomer.phone} onChange={e => setNewCustomer({...newCustomer, phone: e.target.value})} placeholder="03XXXXXXXXX" />
+            <input 
+              required 
+              type="text" 
+              className="form-input" 
+              value={newCustomer.phone} 
+              onChange={e => setNewCustomer({...newCustomer, phone: formatPhone(e.target.value)})} 
+              placeholder="03XX-XXXXXXX" 
+            />
           </div>
 
           <div className="form-group">
@@ -146,9 +162,13 @@ export default function CustomerManager({ onSelect }) {
             type="text" 
             className="form-input" 
             style={{ paddingLeft: '3.5rem', height: '64px', fontSize: '1.1rem', borderRadius: '18px', boxShadow: 'var(--shadow)' }} 
-            placeholder="Type customer name (e.g. Asad)..." 
+            placeholder="Type name or phone (e.g. 0300-123)..." 
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
+            onChange={e => {
+              const val = e.target.value;
+              if (val.startsWith('03')) setSearchQuery(formatPhone(val));
+              else setSearchQuery(val);
+            }}
             autoFocus
           />
         </div>
@@ -194,7 +214,24 @@ export default function CustomerManager({ onSelect }) {
                     <span className="text-[10px] font-bold text-blue-600 font-mono tracking-tight">{c.phone}</span>
                   </div>
                 </div>
-                <div style={{ color: 'var(--primary-light)', fontSize: '1.2rem', opacity: 0.5 }}>→</div>
+                <div className="flex flex-col items-center gap-2">
+                  <div style={{ color: 'var(--primary-light)', fontSize: '1.2rem', opacity: 0.5 }}>→</div>
+                  <button 
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      if (window.confirm(`Mark ${c.name} as visited without order?`)) {
+                        const user = JSON.parse(localStorage.getItem('user') || '{}');
+                        const { logVisit } = await import('../store');
+                        await logVisit({ userId: user.id, customerName: c.name });
+                        alert("Visit logged successfully.");
+                      }
+                    }}
+                    className="btn btn-outline text-[10px] p-1 border-slate-200 text-slate-400 hover:border-primary hover:text-primary"
+                    style={{ minHeight: '24px', whiteSpace: 'nowrap' }}
+                  >
+                    📍 Mark Visited
+                  </button>
+                </div>
               </div>
             ))
           )}

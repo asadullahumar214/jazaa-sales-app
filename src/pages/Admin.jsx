@@ -11,13 +11,42 @@ export default function Admin() {
   const [inventory, setLocalInventory] = useState([]);
   const [orders, setLocalOrders] = useState([]);
   const [search, setSearch] = useState('');
-  const [activeTab, setActiveTab] = useState('orders');
+  const [activeTab, setActiveTab] = useState(() => localStorage.getItem('admin_active_tab') || 'orders');
   const [recentCustomers, setRecentCustomers] = useState([]);
   const [brandFilter, setBrandFilter] = useState('All');
   const [discountUpdate, setDiscountUpdate] = useState({ brand: '', main_qty: 12, foc: 0 });
+  const [dateFilter, setDateFilter] = useState('Today'); // Today, Yesterday, All
 
-  const confirmedOrders = useMemo(() => orders.filter(o => o && o.status === 'confirmed'), [orders]);
-  const cancelledOrders = useMemo(() => orders.filter(o => o && o.status === 'cancelled'), [orders]);
+  const filteredOrders = useMemo(() => {
+    return orders.filter(o => {
+      if (!o) return false;
+      const orderDate = new Date(o.date).toLocaleDateString();
+      const today = new Date().toLocaleDateString();
+      const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+      
+      if (dateFilter === 'Today') return orderDate === today;
+      if (dateFilter === 'Yesterday') return orderDate === yesterday;
+      return true; // All
+    });
+  }, [orders, dateFilter]);
+
+  const confirmedOrders = useMemo(() => filteredOrders.filter(o => o && o.status === 'confirmed'), [filteredOrders]);
+  const cancelledOrders = useMemo(() => filteredOrders.filter(o => o && o.status === 'cancelled'), [filteredOrders]);
+
+  const leaderboard = useMemo(() => {
+    const stats = {};
+    confirmedOrders.forEach(o => {
+       if (!stats[o.bookerId]) stats[o.bookerId] = { sales: 0, count: 0 };
+       stats[o.bookerId].sales += (o.totalValue || 0);
+       stats[o.bookerId].count += 1;
+    });
+    return Object.entries(stats).sort((a,b) => b[1].sales - a[1].sales);
+  }, [confirmedOrders]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    localStorage.setItem('admin_active_tab', tab);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,6 +145,13 @@ export default function Admin() {
     XLSX.writeFile(wb, "inventory_template.xlsx");
   };
 
+  const exportInventoryCSV = () => {
+    const ws = XLSX.utils.json_to_sheet(inventory);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Inventory_Backup");
+    XLSX.writeFile(wb, `Jazaa_Inventory_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   const tabStyle = (tab) => ({
     padding: '0.5rem 1rem',
     borderRadius: '20px',
@@ -129,11 +165,45 @@ export default function Admin() {
     minWidth: 'fit-content'
   });
 
+  const generateSummaryEmail = () => {
+    const today = new Date().toLocaleDateString();
+    const total = confirmedOrders.reduce((sum, o) => sum + (o.totalValue || 0), 0);
+    const body = `Daily Sales Summary - ${today}\n\n` +
+                 `Total Orders: ${confirmedOrders.length}\n` +
+                 `Total Value: Rs. ${total.toLocaleString()}\n\n` +
+                 `Leaderboard:\n` +
+                 leaderboard.map(([id, s]) => `- ${id}: Rs. ${s.sales.toLocaleString()} (${s.count} orders)`).join('\n');
+    
+    window.open(`mailto:?subject=Jazaa Sales Summary ${today}&body=${encodeURIComponent(body)}`);
+  };
+
+  const exportFilteredToCSV = () => {
+    const ws = XLSX.utils.json_to_sheet(confirmedOrders.map(o => ({
+      ID: o.id,
+      Date: new Date(o.date).toLocaleString(),
+      Shop: o.customerName,
+      Booker: o.bookerId,
+      Amount: o.totalValue,
+      Format: o.invoiceFormat
+    })));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Daily_Report");
+    XLSX.writeFile(wb, `Jazaa_Sales_Report_${new Date().toLocaleDateString()}.xlsx`);
+  };
+
   return (
     <div className="container">
       <div className="mb-6">
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Admin Dashboard</h2>
-        <p className="text-sm text-muted">Core oversight and system configuration.</p>
+        <div className="flex justify-between items-end">
+          <div>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Admin Dashboard</h2>
+            <p className="text-sm text-muted">Core oversight and system configuration.</p>
+          </div>
+          <div className="text-right hidden md:block">
+            <p className="text-[10px] uppercase font-bold text-muted tracking-widest">Global Sales Today</p>
+            <p className="text-2xl font-bold text-primary">Rs. {confirmedOrders.reduce((s,o) => s+(o.totalValue||0),0).toLocaleString()}</p>
+          </div>
+        </div>
       </div>
 
       {recentCustomers.length > 0 && (
@@ -149,21 +219,47 @@ export default function Admin() {
 
       {/* HORIZONTAL TAB BAR (Scrollable on Mobile) */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <button style={tabStyle('orders')} onClick={() => setActiveTab('orders')}>Orders</button>
-        <button style={tabStyle('inventory')} onClick={() => setActiveTab('inventory')}>Inventory</button>
-        <button style={tabStyle('customers')} onClick={() => setActiveTab('customers')}>Customers</button>
-        <button style={tabStyle('users')} onClick={() => setActiveTab('users')}>Users</button>
-        <button style={tabStyle('reports')} onClick={() => setActiveTab('reports')}>Reports</button>
-        <button style={tabStyle('settings')} onClick={() => setActiveTab('settings')}>Settings</button>
+        <button style={tabStyle('orders')} onClick={() => handleTabChange('orders')}>Orders</button>
+        <button style={tabStyle('inventory')} onClick={() => handleTabChange('inventory')}>Inventory</button>
+        <button style={tabStyle('customers')} onClick={() => handleTabChange('customers')}>Customers</button>
+        <button style={tabStyle('users')} onClick={() => handleTabChange('users')}>Users</button>
+        <button style={tabStyle('reports')} onClick={() => handleTabChange('reports')}>Reports</button>
+        <button style={tabStyle('settings')} onClick={() => handleTabChange('settings')}>Settings</button>
       </div>
 
-      {/* Orders Tab */}
-      {activeTab === 'orders' && (
-        <div className="animate-in">
-           <div className="flex justify-between items-center mb-4">
+           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
               <h3 className="text-lg">Confirmed Orders</h3>
-              <span className="text-xs font-bold text-muted uppercase">Recent First</span>
+              <div className="flex gap-2">
+                 <button className="btn btn-outline text-[10px] py-1" onClick={exportFilteredToCSV}>📥 Export XLSX</button>
+                 <button className="btn btn-secondary text-[10px] py-1" onClick={generateSummaryEmail}>📧 Email Summary</button>
+                 <div className="flex gap-1 bg-slate-100 p-1 rounded-lg">
+                  {['Today', 'Yesterday', 'All'].map(f => (
+                    <button 
+                      key={f} 
+                      onClick={() => setDateFilter(f)}
+                      className={`px-3 py-1 rounded-md text-[10px] uppercase font-bold tracking-widest transition-all ${dateFilter === f ? 'bg-white shadow-sm text-primary' : 'text-slate-500'}`}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                 </div>
+              </div>
            </div>
+
+           {leaderboard.length > 0 && (
+             <div className="mb-6 animate-in">
+               <p className="text-[10px] uppercase font-bold text-muted mb-2 tracking-widest">Performance Leaderboard</p>
+               <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+                  {leaderboard.map(([id, s]) => (
+                    <div key={id} className="bg-white border border-slate-100 p-3 rounded-xl shadow-sm min-w-[140px] border-l-4 border-l-success">
+                       <p className="text-xs font-bold text-slate-800 uppercase truncate">{id}</p>
+                       <p className="text-[10px] text-muted">Rs. {s.sales.toLocaleString()}</p>
+                       <div className="text-[9px] font-bold text-primary mt-1">{s.count} Orders</div>
+                    </div>
+                  ))}
+               </div>
+             </div>
+           )}
            <div className="card-list">
               {confirmedOrders.length === 0 ? (
                 <div className="card text-center py-8 text-muted text-sm italic">No confirmed orders.</div>
@@ -177,7 +273,10 @@ export default function Admin() {
                         </div>
                         <p className="font-bold text-primary">Rs. {o.totalValue?.toLocaleString()}</p>
                      </div>
-                     <span className="text-[10px] font-bold uppercase bg-slate-100 px-2 py-0.5 rounded">{o.invoiceFormat}</span>
+                     <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-bold uppercase bg-slate-100 px-2 py-0.5 rounded text-slate-600">{o.invoiceFormat}</span>
+                        <span className="text-[9px] font-bold uppercase bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full border border-emerald-200">CONFIRMED</span>
+                     </div>
                   </div>
                 ))
               )}
@@ -193,7 +292,10 @@ export default function Admin() {
                            <p className="font-bold text-sm">{o.customerName}</p>
                            <p className="text-danger font-bold">Rs. {o.totalValue?.toLocaleString()}</p>
                         </div>
-                        <p className="text-xs text-muted mt-1 italic">Reason: {o.cancel_reason}</p>
+                        <div className="flex justify-between items-center mt-2">
+                           <p className="text-xs text-muted italic">Reason: {o.cancel_reason}</p>
+                           <span className="text-[9px] font-bold uppercase bg-red-100 text-red-700 px-2 py-0.5 rounded-full border border-red-200">CANCELLED</span>
+                        </div>
                      </div>
                    ))}
                 </div>
@@ -227,13 +329,16 @@ export default function Admin() {
                    const update = inventory.map(i => (i.brand || 'Unbranded') === discountUpdate.brand ? { ...i, main_qty: discountUpdate.main_qty, foc: discountUpdate.foc } : i);
                    setLocalInventory(update); await setInventory(update); alert("Updated!");
                 }}>Apply</button>
-                 <div className="flex gap-2">
+                 <div className="flex flex-wrap gap-2">
                     <button className="btn btn-outline text-[10px] flex-1 text-center py-1" onClick={downloadTemplate}>
                        📥 Template
                     </button>
                     <label className="btn btn-primary text-[10px] cursor-pointer flex-1 text-center py-1">
                        📤 Import <input type="file" accept=".xlsx" style={{ display: 'none' }} onChange={handleFileUpload} />
                     </label>
+                    <button className="btn btn-secondary text-[10px] flex-1 text-center py-1 bg-green-600 hover:bg-green-700" onClick={exportInventoryCSV}>
+                       📊 Export CSV
+                    </button>
                  </div>
               </div>
            </div>
@@ -254,7 +359,9 @@ export default function Admin() {
                          <p className="text-xs text-muted">{item.brand || 'Unbranded'} • SKU: {item.id}</p>
                       </div>
                       <div className="text-right">
-                         <p className={`font-bold ${item.stock <= 10 ? 'text-danger' : 'text-success'}`}>{item.stock} in stock</p>
+                         <p className={`font-bold ${item.stock <= 5 ? 'text-danger' : (item.stock <= 15 ? 'text-orange-500' : 'text-success')}`}>
+                            {item.stock} in stock
+                         </p>
                          <p className="text-[10px] text-muted">Promo: {item.main_qty}+{item.foc}</p>
                       </div>
                    </div>

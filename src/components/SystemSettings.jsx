@@ -43,12 +43,35 @@ export default function SystemSettings() {
     { key: 'registered', label: 'STRN + IT (Both) ➔ 0.5%' }
   ];
 
+  const handleColorChange = (val) => {
+    setLocalSettings(prev => ({
+      ...prev,
+      primary_color: val
+    }));
+  };
+
   return (
     <div className="card mt-4 mb-4">
       <h3>⚙️ System Logic & Settings</h3>
       <p className="text-muted" style={{ fontSize: '0.85rem', marginBottom: '1.5rem' }}>
         Adjust tax percentages across different customer profiles and product types. Values are decimals (e.g., 0.18 for 18%). FOC adjustments should be handled through inventory.
       </p>
+
+      <div className="card mb-6 border-l-4 border-l-primary bg-slate-50">
+        <h4 className="text-sm font-bold uppercase mb-2">App Branding</h4>
+        <div className="flex items-center gap-4">
+           <div className="form-group mb-0">
+             <label className="text-[10px]">Primary Theme Color</label>
+             <input 
+               type="color" 
+               value={settings.primary_color || '#2563eb'} 
+               onChange={e => handleColorChange(e.target.value)}
+               className="h-10 w-20 cursor-pointer rounded border-none p-0"
+             />
+           </div>
+           <p className="text-xs text-muted">This color will be used for buttons, headers, and highlights across the entire app.</p>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md-grid-cols-3 gap-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
         {categories.map(({ key, label }) => (

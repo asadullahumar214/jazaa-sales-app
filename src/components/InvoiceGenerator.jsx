@@ -6,6 +6,10 @@ import autoTable from 'jspdf-autotable';
 export default function InvoiceGenerator({ customer, inventory, settingsObj, onSend, onCancel, initialCart = [] }) {
   const [format, setFormat] = useState('TP'); // 'TP', 'RP'
   const [items, setItems] = useState([]);
+  const [swipedIndex, setSwipedIndex] = useState(null);
+  const [touchStart, setTouchStart] = useState(null);
+  const [focusedIndex, setFocusedIndex] = useState(null);
+  const [lastTap, setLastTap] = useState({ time: 0, index: null });
 
   // Initialize with initialCart or one empty row
   useEffect(() => {
@@ -72,8 +76,8 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
       day: '2-digit', month: 'short', year: 'numeric'
     }).replace(/ /g, '-');
     
-    const fileNameDate = dateFormatted.replace(/-/g, '').toLowerCase();
-    const fileName = `${fileNameDate}_${customer.name.replace(/\s+/g, '')}_${Math.round(grandTotal)}.pdf`;
+    const fileNameDate = date.toISOString().split('T')[0];
+    const fileName = `INV_${customer.name.replace(/\s+/g, '_')}_${fileNameDate}.pdf`;
 
     // Header Branding
     doc.setTextColor(29, 78, 216); // Blue
@@ -198,7 +202,8 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
     doc.text("Thank you for your business.", 15, finalY + 5);
 
     doc.save(fileName);
-    onSend('pdf', `Exported ${format}`, Math.round(grandTotal), format);
+    if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    onSend('pdf', `Exported ${format}`, Math.round(grandTotal), format, Math.round(totalAfterDiscount));
   };
 
   return (
@@ -260,9 +265,18 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
               const rowData = product ? calculateTaxesAndTotals(customer.type, product, parseInt(item.qty || 0), settingsObj, (item.discount || 0) / 100) : null;
               
               return (
-                <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                <tr key={index} 
+                   className={`border-b border-slate-100 hover:bg-slate-50 transition-all swipe-row ${swipedIndex === index ? 'swiped' : ''} ${focusedIndex === index ? 'bg-blue-50/50 ring-1 ring-inset ring-primary/10' : ''}`}
+                   onTouchStart={e => setTouchStart(e.targetTouches[0].clientX)}
+                   onTouchEnd={e => {
+                      const touchEnd = e.changedTouches[0].clientX;
+                      if (touchStart - touchEnd > 70) setSwipedIndex(index);
+                      if (touchEnd - touchStart > 70) setSwipedIndex(null);
+                   }}
+                >
                   <td className="p-1 sticky-column">
-                    <div className="relative group">
+                    <button className="swipe-delete-btn" onClick={() => removeRow(index)}>🗑️</button>
+                    <div className="relative group swipe-content">
                       <input 
                         type="text"
                         placeholder="Search Product..."
@@ -270,33 +284,56 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                         style={{ padding: '0 0.5rem', width: '100%' }}
                         value={item.searchTerm || (product?.name ? `${product.name} (${product.brand})` : '')}
                         onChange={(e) => updateItem(index, 'searchTerm', e.target.value)}
-                        onFocus={() => updateItem(index, 'isSearching', true)}
+                        onFocus={(e) => {
+                          updateItem(index, 'isSearching', true);
+                          setFocusedIndex(index);
+                          e.target.select();
+                        }}
+                        onBlur={() => setFocusedIndex(null)}
                       />
                       
                       {item.isSearching && (
                         <div className="absolute top-full left-0 w-full max-h-48 overflow-y-auto bg-white border border-slate-200 shadow-xl z-50 rounded-lg">
                           {inventory
                             .filter(p => !item.searchTerm || p.name.toLowerCase().includes(item.searchTerm.toLowerCase()) || p.brand?.toLowerCase().includes(item.searchTerm.toLowerCase()))
-                            .map(p => (
-                              <div 
-                                key={p.id} 
-                                className="p-2 text-xs hover:bg-slate-100 cursor-pointer border-b border-slate-50 flex justify-between gap-2"
-                                onClick={() => {
-                                  updateItem(index, 'productId', p.id);
-                                  updateItem(index, 'searchTerm', '');
-                                  updateItem(index, 'isSearching', false);
-                                }}
-                              >
-                                <div className="font-bold">{p.name} <span className="text-[10px] text-muted font-normal">({p.brand})</span></div>
-                                <div className={`font-bold ${p.stock <= 5 ? 'text-red-600' : 'text-slate-400'}`}>Avl: {p.stock}</div>
-                              </div>
-                            ))}
+                            .map(p => {
+                               const term = item.searchTerm?.toLowerCase() || '';
+                               const highlight = (text) => {
+                                 if (!term) return text;
+                                 const parts = text.split(new RegExp(`(${term})`, 'gi'));
+                                 return parts.map((part, i) => 
+                                   part.toLowerCase() === term ? <strong key={i} className="text-primary underline">{part}</strong> : part
+                                 );
+                               };
+                               return (
+                                <div 
+                                  key={p.id} 
+                                  className="p-2 text-xs hover:bg-slate-100 cursor-pointer border-b border-slate-50 flex justify-between gap-2"
+                                  onClick={() => {
+                                    updateItem(index, 'productId', p.id);
+                                    updateItem(index, 'searchTerm', '');
+                                    updateItem(index, 'isSearching', false);
+                                    // AUTO-FOCUS NEXT: Move to Qty
+                                    setTimeout(() => {
+                                      document.getElementById(`qty-${index}`)?.focus();
+                                    }, 50);
+                                  }}
+                                >
+                                  <div className="font-bold">{highlight(p.name)} <span className="text-[10px] text-muted font-normal">({highlight(p.brand || '')})</span></div>
+                                  <div className={`font-bold ${p.stock <= 5 ? 'text-red-600' : (p.stock <= 15 ? 'text-orange-500' : 'text-emerald-500')}`}>Avl: {p.stock}</div>
+                                </div>
+                               );
+                            })}
                         </div>
                       )}
                     </div>
 
                     <div className="flex justify-between items-center mt-1 px-1">
-                       {product && <span className={`text-[10px] font-bold ${product.stock <= 0 ? 'text-red-600' : 'text-slate-400'}`}>Stock: {product.stock}</span>}
+                       {product && (
+                         <span className={`text-[10px] font-bold ${product.stock <= 5 ? 'text-red-600' : (product.stock <= 15 ? 'text-orange-500' : 'text-slate-400')}`}>
+                           Stock: {product.stock}
+                         </span>
+                       )}
                        {rowData?.isBelowFloor && (
                         <div className="text-[0.55rem] text-red-600 font-bold uppercase">
                           ⚠️ Below Min (Rs. {rowData.floorPrice})
@@ -313,10 +350,23 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                   <td className="p-1 text-center">
                     <input 
                       type="number" 
-                      className="form-input text-base text-center h-12 min-h-0 p-2 font-bold" 
+                      id={`qty-${index}`}
+                      className="form-input text-base text-center h-12 min-h-0 p-2 font-bold focus:ring-2 focus:ring-primary/20" 
                       style={{ width: '100px' }}
                       value={item.qty} 
                       onChange={(e) => updateItem(index, 'qty', e.target.value)}
+                      onFocus={(e) => {
+                        setFocusedIndex(index);
+                        e.target.select();
+                      }}
+                      onBlur={() => setFocusedIndex(null)}
+                      onClick={() => {
+                        const now = Date.now();
+                        if (now - lastTap.time < 300 && lastTap.index === index) {
+                           updateItem(index, 'qty', 0);
+                        }
+                        setLastTap({ time: now, index });
+                      }}
                     />
                   </td>
                   <td className="p-1 text-center text-xs">
@@ -325,10 +375,12 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                   <td className="p-1 text-center">
                     <input 
                       type="number" 
+                      inputMode="decimal"
                       className="form-input text-base text-center h-12 min-h-0 p-2 font-bold" 
                       style={{ width: '100px' }}
                       value={item.discount} 
                       onChange={(e) => updateItem(index, 'discount', e.target.value)}
+                      onFocus={(e) => e.target.select()}
                     />
                   </td>
                   {format === 'TP' && (
@@ -344,7 +396,7 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                   <td className="p-1 text-right font-bold text-xs text-primary">
                     {rowData ? rowData.total.toLocaleString(undefined, { minimumFractionDigits: 2 }) : '0.00'}
                   </td>
-                  <td className="p-1 text-center">
+                  <td className="p-1 text-center desktop-only">
                     <button onClick={() => removeRow(index)} className="text-slate-300 hover:text-red-500 transition-colors">🗑️</button>
                   </td>
                 </tr>
@@ -354,9 +406,17 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
         </table>
       </div>
 
-      <button onClick={addRow} className="btn btn-outline w-full mt-4 border-dashed border-2 hover:border-primary hover:text-primary py-2 text-sm font-bold">
-        + Add New Line
-      </button>
+      <div className="flex gap-2">
+        <button onClick={addRow} className="btn btn-outline flex-1 mt-4 border-dashed border-2 hover:border-primary hover:text-primary py-2 text-sm font-bold">
+          + Add New Line
+        </button>
+        <button 
+          onClick={() => { if(window.confirm("Clear all items?")) setItems([{ productId: '', qty: 1, discount: 0 }]); }} 
+          className="btn btn-outline border-slate-200 text-slate-400 mt-4 py-2 text-sm px-4"
+        >
+          🗑️ Clear All
+        </button>
+      </div>
 
       {/* FOOTER & EXPORT */}
       <div className="mt-8 pt-6 border-t border-slate-200">
@@ -374,7 +434,11 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
                ))}
             </div>
             
-            <div className="text-right">
+            <div className="text-right flex flex-col gap-1">
+               <div className="flex justify-end gap-8 text-[0.65rem] text-muted uppercase font-bold tracking-widest border-b border-slate-100 pb-2 mb-2">
+                  <div>GST: Rs. {invoiceData.reduce((sum, r) => sum + r.gstAmt, 0).toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+                  <div>Adv Tax: Rs. {invoiceData.reduce((sum, r) => sum + r.advTaxAmt, 0).toLocaleString(undefined, {minimumFractionDigits:2})}</div>
+               </div>
                <p className="text-xs text-muted uppercase font-bold mb-1 tracking-widest">Grand Total</p>
                <h2 className="text-3xl font-bold text-primary">Rs. {Math.round(grandTotal).toLocaleString()}</h2>
                <p className="text-[0.65rem] text-muted italic mt-1">Inclusive of all taxes & discounts</p>

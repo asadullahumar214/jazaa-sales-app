@@ -4,7 +4,7 @@ import { initStore, getActiveUser, setActiveUser, supabase } from './store';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import OrderBooker from './pages/OrderBooker';
-import './index.css';
+
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const user = getActiveUser();
@@ -13,7 +13,11 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   return children;
 };
 
+const APP_VERSION = "2.2.0";
+
 export default function App() {
+  const [themeColor, setThemeColor] = useState('#2563eb');
+  const [isOnline, setIsOnline] = useState(true);
   // Rescue Loop: Synchronous hydration prevents 1-frame routing flashes
   const [user, setUser] = useState(() => {
     try {
@@ -50,8 +54,33 @@ export default function App() {
     };
 
     syncStatus();
+    
+    // Theme Sync
+    const fetchTheme = async () => {
+       const { data } = await supabase.from('settings').select('config').eq('id', true).single();
+       if (data?.config?.primary_color) {
+          setThemeColor(data.config.primary_color);
+       }
+    };
+    fetchTheme();
+
+    // Heartbeat - Check network status
+    const checkNetwork = async () => {
+       try {
+         const { error } = await supabase.from('settings').select('id').limit(1);
+         setIsOnline(!error);
+       } catch (e) {
+         setIsOnline(false);
+       }
+    };
+    checkNetwork();
+    const networkInterval = setInterval(checkNetwork, 30000);
+
     const interval = setInterval(syncStatus, 15000); 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearInterval(networkInterval);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -92,6 +121,26 @@ export default function App() {
            user ? (user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/booker" />) : <Navigate to="/login" />
         } />
       </Routes>
+      
+      <style>{`
+        :root {
+          --primary: ${themeColor};
+          --primary-light: ${themeColor}22;
+        }
+      `}</style>
+
+      <footer className="p-4 text-center text-[10px] text-slate-400 opacity-50 uppercase tracking-widest fixed bottom-0 w-full pointer-events-none flex items-center justify-center gap-2">
+        <span style={{ 
+          width: '6px', 
+          height: '6px', 
+          borderRadius: '50%', 
+          background: isOnline ? '#22c55e' : '#ef4444',
+          display: 'inline-block',
+          boxShadow: isOnline ? '0 0 4px #22c55e' : '0 0 4px #ef4444',
+          transition: 'all 0.3s ease'
+        }}></span>
+        Jazaa Sales App v{APP_VERSION}
+      </footer>
     </BrowserRouter>
   );
 }

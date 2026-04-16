@@ -9,6 +9,13 @@ export default function UserManager() {
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const formatPhone = (val) => {
+    const cleaned = ('' + val).replace(/\D/g, '');
+    if (cleaned.length <= 4) return cleaned;
+    if (cleaned.length <= 11) return `${cleaned.slice(0, 4)}-${cleaned.slice(4)}`;
+    return `${cleaned.slice(0, 4)}-${cleaned.slice(4, 11)}`;
+  };
+
   useEffect(() => {
     const fetch = async () => {
       const u = await getUsers();
@@ -79,7 +86,7 @@ export default function UserManager() {
            <h4 className="text-xs font-bold text-muted uppercase mb-4">Create OrderBooker</h4>
            <form onSubmit={handleCreate} className="flex flex-col gap-4">
               {error && <div className="p-3 bg-red-100 text-red-700 text-xs rounded-lg border border-red-200 font-bold">{error}</div>}
-              <div className="form-group"><label>Login ID</label><input required className="form-input" placeholder="e.g. jaza_01" value={newId} onChange={e => setNewId(e.target.value)} /></div>
+              <div className="form-group"><label>Login ID / Phone</label><input required className="form-input" placeholder="03XX-XXXXXXX" value={newId} onChange={e => setNewId(formatPhone(e.target.value))} /></div>
               <div className="form-group"><label>Name</label><input required className="form-input" placeholder="e.g. Ahmad Ali" value={newName} onChange={e => setNewName(e.target.value)} /></div>
               <div className="form-group"><label>Password</label><input required className="form-input" placeholder="••••••••" value={newPassword} onChange={e => setNewPassword(e.target.value)} /></div>
               <button type="submit" disabled={saving} className="btn btn-primary py-3">{saving ? 'Processing...' : 'Add Account'}</button>

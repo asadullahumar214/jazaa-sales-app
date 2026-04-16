@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS public.users (
   name text NOT NULL,
   password text NOT NULL,
   is_active boolean DEFAULT true,
+  floor_check_enabled boolean DEFAULT true,
+  stock_check_enabled boolean DEFAULT true,
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -86,9 +88,9 @@ CREATE TABLE IF NOT EXISTS public.audit_logs (
 );
 
 -- Initial Users Seed
-INSERT INTO public.users (id, role, name, password, is_active) VALUES 
-('admin', 'admin', 'System Admin', 'admin123', true),
-('shan', 'orderbooker', 'Shan', 'shan123', true)
+INSERT INTO public.users (id, role, name, password, is_active, floor_check_enabled, stock_check_enabled) VALUES 
+('admin', 'admin', 'System Admin', 'admin123', true, true, true),
+('shan', 'orderbooker', 'Shan', 'shan123', true, true, true)
 ON CONFLICT (id) DO NOTHING;
 
 -- ==========================================
