@@ -210,7 +210,15 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
       </div>
 
       {/* LINE-BY-LINE ENTRY TABLE */}
-      <h3 className="text-sm font-bold mb-3 uppercase text-slate-500 tracking-tight">Invoice Details</h3>
+      <div className="flex justify-between items-end mb-3">
+        <h3 className="text-sm font-bold uppercase text-slate-500 tracking-tight">Invoice Details</h3>
+        {format === 'TP' && (
+          <div className="flex items-center gap-1.5 text-primary text-[0.65rem] font-bold animate-pulse">
+            <span>⬅️ SWIPE FOR TAXES</span>
+            <div className="w-4 h-0.5 bg-primary/30 rounded-full"></div>
+          </div>
+        )}
+      </div>
       <div className="table-responsive" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         <table className="w-full text-nowrap">
           <thead>

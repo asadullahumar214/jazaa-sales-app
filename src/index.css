@@ -55,8 +55,8 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -204,7 +204,6 @@ h1, h2, h3, h4 {
 .table-responsive {
   width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   border-radius: 8px;
   border: 1px solid var(--border);
 }
@@ -256,8 +255,8 @@ th {
   max-width: 480px;
   height: 72px;
   background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -388,16 +387,18 @@ th {
   background-color: rgba(37, 99, 235, 0.04);
 }
 
-/* Scrollbar for search results */
-.card-list::-webkit-scrollbar {
-  width: 6px;
+/* Custom scrollbar for multi-column tables */
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
 }
-.card-list::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+.table-responsive::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
   border-radius: 10px;
+  opacity: 0.5;
 }
-.card-list::-webkit-scrollbar-track {
-  background: transparent;
+.table-responsive::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
 }
 
 /* ERP Table & Header */
@@ -427,8 +428,8 @@ th {
   top: 0;
   z-index: 100;
   background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   padding: 1rem 1.5rem;
   border-radius: 0 0 24px 24px;
   border-bottom: 1px solid var(--border);
