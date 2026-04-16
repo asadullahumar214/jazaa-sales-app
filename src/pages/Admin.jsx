@@ -227,6 +227,9 @@ export default function Admin() {
         <button style={tabStyle('settings')} onClick={() => handleTabChange('settings')}>Settings</button>
       </div>
 
+      {/* Orders Tab */}
+      {activeTab === 'orders' && (
+        <div className="animate-in">
            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
               <h3 className="text-lg">Confirmed Orders</h3>
               <div className="flex gap-2">
