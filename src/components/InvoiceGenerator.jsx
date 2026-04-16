@@ -213,17 +213,17 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
       <div className="flex justify-between items-end mb-3">
         <h3 className="text-sm font-bold uppercase text-slate-500 tracking-tight">Invoice Details</h3>
         {format === 'TP' && (
-          <div className="flex items-center gap-1.5 text-primary text-[0.65rem] font-bold animate-pulse">
+          <div className="flex items-center gap-1.5 text-primary text-[0.65rem] font-bold animate-swipe">
             <span>⬅️ SWIPE FOR TAXES</span>
             <div className="w-4 h-0.5 bg-primary/30 rounded-full"></div>
           </div>
         )}
       </div>
-      <div className="table-responsive" style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <div className="table-responsive">
         <table className="w-full text-nowrap">
           <thead>
             <tr className="bg-slate-100 text-[0.65rem] font-bold uppercase text-slate-600">
-              <th className="p-2 text-left" style={{ minWidth: '180px' }}>Product</th>
+              <th className="p-2 text-left sticky-column" style={{ minWidth: '180px' }}>Product</th>
               {format === 'TP' && <th className="p-2 text-center">Type</th>}
               <th className="p-2 text-center" style={{ width: '60px' }}>Qty</th>
               <th className="p-2 text-center">{format === 'TP' ? 'Rate' : 'RP'}</th>
@@ -249,7 +249,7 @@ export default function InvoiceGenerator({ customer, inventory, settingsObj, onS
               
               return (
                 <tr key={index} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                  <td className="p-1">
+                  <td className="p-1 sticky-column">
                     <select 
                       className="form-select text-xs h-9 min-h-0" 
                       value={item.productId} 

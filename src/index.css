@@ -282,6 +282,16 @@ th {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
+@keyframes swipe-hint {
+  0% { transform: translateX(0); opacity: 0.5; }
+  50% { transform: translateX(-10px); opacity: 1; }
+  100% { transform: translateX(0); opacity: 0.5; }
+}
+
+.animate-swipe {
+  animation: swipe-hint 2s ease-in-out infinite;
+}
+
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -399,6 +409,20 @@ th {
 .table-responsive::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
   border-radius: 10px;
+}
+
+/* Sticky First Column for Product Selection */
+.sticky-column {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: white !important;
+  box-shadow: 4px 0 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+th.sticky-column {
+  background: #f8fafc !important;
+  z-index: 11;
 }
 
 /* ERP Table & Header */
