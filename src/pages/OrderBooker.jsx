@@ -14,6 +14,7 @@ export default function OrderBooker() {
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState('shop'); // shop (selection), invoice, history
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const [startY, setStartY] = useState(0);
   const [pulling, setPulling] = useState(false);
   const [topProducts, setTopProducts] = useState([]);
@@ -62,8 +63,17 @@ export default function OrderBooker() {
     };
     init();
     
+    const handleScroll = () => {
+      if (window.scrollY > 300) setShowScrollTop(true);
+      else setShowScrollTop(false);
+    };
+    window.addEventListener('scroll', handleScroll);
+    
     const intv = setInterval(loadData, 10000); 
-    return () => clearInterval(intv);
+    return () => {
+      clearInterval(intv);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const selectedCustomer = customers.find(c => String(c.id) === String(selectedCustomerId));
